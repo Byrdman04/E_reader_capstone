@@ -11,7 +11,7 @@ function App() {
           {/*<p>
             Edit <code>src/App.js</code> and save to reload.
           </p>*/}
-          <p>Hello World! From CSCI 4805</p>
+          <p>Hello World! From CSCI 4805, Brady Byrd, John Hurley, Chandler Boone, and Danny Lee</p>
           <a
             className="App-link"
             href="https://reactjs.org"
