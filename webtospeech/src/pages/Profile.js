@@ -1,9 +1,9 @@
 import '../styles/profile.css';
 import pfp from '../resources/user-profile-icon.png';
-import { useNavigate } from 'react-router-dom';
+//import { useNavigate } from 'react-router-dom';
 
 function Profile() {
-    const navigate = useNavigate();
+    /*const navigate = useNavigate();
 
     const loadDashboardPage = () => {
         navigate('/Dashboard');
@@ -11,7 +11,7 @@ function Profile() {
 
     const loadLoginPage = () => {
         navigate('/');
-    };
+    };*/
 
     return (
         <div className="Profile">

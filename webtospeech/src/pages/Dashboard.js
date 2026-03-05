@@ -11,7 +11,7 @@ function Dashboard() {
     navigate('/Profile');
     };
 
-const [directories, setDirectories] = useState([
+const [directories/*, setDirectories*/] = useState([
     { id: 1, name: 'Fiction' },
     { id: 2, name: 'Non-Fiction' },
     { id: 3, name: 'Technical' },
