@@ -1,15 +1,22 @@
 import { User, FolderPlus, Upload } from 'lucide-react';
+import { useNavigate } from 'react-router';
 import './Sidebar.css';
 
 export default function Sidebar() {
+  const navigate = useNavigate();
+
   return (
     <aside className="sidebar">
       {/* User Profile */}
-      <div className="sidebar-user-profile">
+      <button 
+        className="sidebar-user-profile"
+        onClick={() => navigate('/profile')}
+        aria-label="Go to profile"
+      >
         <div className="sidebar-user-avatar">
           <User />
         </div>
-      </div>
+      </button>
 
       {/* Add Folder Button */}
       <button className="sidebar-button">
