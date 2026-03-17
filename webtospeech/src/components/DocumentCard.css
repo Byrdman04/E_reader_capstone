@@ -1,0 +1,74 @@
+.document-card-wrapper {
+  position: relative;
+}
+
+.document-card {
+  aspect-ratio: 3/4;
+  background-color: white;
+  border: 3px solid var(--brand-red-border);
+  cursor: pointer;
+  transition: box-shadow 0.2s;
+}
+
+.document-card:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+}
+
+.document-card-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.document-card-icon {
+  width: 4rem;
+  height: 4rem;
+  margin-bottom: 1rem;
+  color: var(--brand-red);
+}
+
+.document-card-title {
+  text-align: center;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.document-card-type {
+  font-size: 0.875rem;
+  color: #6b7280;
+  text-align: center;
+}
+
+.document-card-menu {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  padding: 0.25rem;
+  background-color: white;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.document-card-wrapper:hover .document-card-menu {
+  opacity: 1;
+}
+
+.document-card-menu svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--brand-red);
+}
+
+.document-card-date {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-top: 0.5rem;
+  text-align: center;
+}
