@@ -59,5 +59,17 @@ https://supabase.com/docs/guides/storage/uploads/standard-uploads
 Note: May need to use the TUS Resumable Upload Protocol
     also linked on the supabase page above the example. 
 
+- Supabase UI Library 
+https://supabase.com/ui
+Note: This is also a option for file uploading worth discussing. 
 
+--------------------------------------------------------------------
+**IMPORTANT**   
+Personalized experince with database notes.
+
+Will need to make:
+    - More tables
+    - Row Level Security (RLS) Policies
+    - Upload files using users ID 
+----------------------------------------------------------------------
 
