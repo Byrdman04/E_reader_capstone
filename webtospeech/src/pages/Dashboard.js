@@ -1,7 +1,9 @@
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { User, Search, Filter, FolderPlus, Upload } from 'lucide-react';
 import './Dashboard.css';
+import Book from '../components/BookDir/Book';
+import Collection from '../components/BookDir/Collection';
 
 
 function Dashboard() {
@@ -18,14 +20,13 @@ const [directories/*, setDirectories*/] = useState([
     { id: 4, name: 'Research' },
   ]);
 
-  const [books] = useState([
-    { id: 1, title: 'The Great Gatsby', author: 'F. Scott Fitzgerald', cover: '#e5e7eb' },
-    { id: 2, title: '1984', author: 'George Orwell', cover: '#dbeafe' },
-    { id: 3, title: 'To Kill a Mockingbird', author: 'Harper Lee', cover: '#fce7f3' },
-    { id: 4, title: 'Pride and Prejudice', author: 'Jane Austen', cover: '#fef3c7' },
-    { id: 5, title: 'The Catcher in the Rye', author: 'J.D. Salinger', cover: '#d1fae5' },
-    { id: 6, title: 'Animal Farm', author: 'George Orwell', cover: '#e0e7ff' },
-  ]);
+const myCollection = useMemo(() => {
+  const col = new Collection();
+  col.addBook(new Book(1, "The Great Gatsby", "F. Scott Fitzgerald", "Fiction", "/path/to/gatsby"));
+  col.addBook(new Book(2, "1984", "George Orwell", "Fiction", "/path/to/1984"));
+  col.addBook(new Book(3, "To Kill a Mockingbird", "Harper Lee", "Fiction", "/path/to/mockingbird"));
+  return col;
+}, []);
 
   const [selectedDirectory, setSelectedDirectory] = useState(null);
 
@@ -86,19 +87,14 @@ const [directories/*, setDirectories*/] = useState([
         {/* Main Content Area */}
         <div className="books-area">
           <div className="books-grid">
-            {books.map((book) => (
-              <div key={book.id} className="book-item">
-                <div
-                  className="book-cover"
-                  style={{ backgroundColor: book.cover }}
-                >
-                  <div className="book-cover-inner">
-                    <div className="book-cover-title">{book.title}</div>
-                  </div>
-                </div>
-                <div className="book-title">{book.title}</div>
-                <div className="book-author">{book.author}</div>
-              </div>
+            {myCollection.getCollection().map((book) => (
+                    <div key={book.id} className="book-item">
+                        <div className="book-cover">
+                            <div className="book-cover-title">{book.title}</div>
+                        </div>
+                        <div className="book-title">{book.title}</div>
+                        <div className="book-author">{book.author}</div>
+                    </div>
             ))}
           </div>
         </div>
