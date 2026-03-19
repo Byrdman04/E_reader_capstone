@@ -1,0 +1,33 @@
+#profile-banner {
+    display: flex;
+    flex-direction: row;
+    height: 18vw;
+    background-color: #950A0A;
+    color: white;
+    justify-content: center;
+    gap: 20%;
+}
+
+#profile-collections-table {
+    display: table;
+}
+
+.column {
+    padding-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#profile-picture {
+    width: 40%;
+}
+
+.banner-text {
+    font-size: 24px;
+}
+
+.header-styling {
+    font-size: 40px;
+    font-weight: 600;
+}

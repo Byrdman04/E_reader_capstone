@@ -4,6 +4,7 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Document from './pages/Document'
 import Profile from './pages/Profile';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (

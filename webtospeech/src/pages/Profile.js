@@ -1,18 +1,17 @@
-import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, User } from 'lucide-react';
-import { Link } from 'react-router';
-import './Profile.css';
+import '../styles/profile.css';
+import pfp from '../resources/user-profile-icon.png';
+//import { useNavigate } from 'react-router-dom';
 
 function Profile() {
-    const navigate = useNavigate();
+    /*const navigate = useNavigate();
 
     const loadDashboardPage = () => {
-    navigate('/Dashboard');
+        navigate('/Dashboard');
     };
 
     const loadLoginPage = () => {
-    navigate('/');
-    };
+        navigate('/');
+    };*/
 
     const collections = [
     { id: 1, name: 'Collection Name' },
