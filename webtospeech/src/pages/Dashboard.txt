@@ -1,3 +1,6 @@
+Holds Dashboard.js 
+
+ 
 import { useNavigate } from 'react-router-dom';
 import { useState, useMemo } from 'react';
 import { User, Search, Filter, FolderPlus, Upload } from 'lucide-react';
@@ -22,9 +25,9 @@ const [directories/*, setDirectories*/] = useState([
 
 const myCollection = useMemo(() => {
   const col = new Collection();
-  col.addBook(new Book(1, "The Great Gatsby", "F. Scott Fitzgerald", "Fiction", "/path/to/gatsby"));
-  col.addBook(new Book(2, "1984", "George Orwell", "Fiction", "/path/to/1984"));
-  col.addBook(new Book(3, "To Kill a Mockingbird", "Harper Lee", "Fiction", "/path/to/mockingbird"));
+  col.addBook(new Book(1, "The Great Gatsby", "F. Scott Fitzgerald", "Fiction", "epub", "/path/to/gatsby"));
+  col.addBook(new Book(2, "1984", "George Orwell", "Fiction", "pdf", "/path/to/1984"));
+  col.addBook(new Book(3, "To Kill a Mockingbird", "Harper Lee", "Fiction", "txt", "/path/to/mockingbird"));
   return col;
 }, []);
 

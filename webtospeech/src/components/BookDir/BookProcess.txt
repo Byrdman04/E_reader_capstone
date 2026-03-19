@@ -1,0 +1,66 @@
+Steps to keep in mind to create a Book. 
+    1. The book is uploaded by the user to the Application.
+    2. Extract the data from File. EX: Author, Title, ...
+    3. Display a Confirm book Detail for user to check correctness.
+    4. Send all necessarry data and the file to the DB. 
+    5. Retrieve the Data and Render.  
+
+
+--------------------------------
+Things to consider how to make Unique id's. 
+Ideas: Link with User ID potentially. 
+
+
+---------------------------------
+
+
+Important Informantion -- From Google AI 
+Topic: How to extract title and author from file types 
+
+To build this in React/JavaScript, you’ll need a specific strategy for each file type because they store data differently. Since these files are uploaded by users, you should use the FileReader API to read the file as an ArrayBuffer before parsing.
+1. EPUB Files (The Easiest)
+EPUBs are standard and almost always contain a "metadata" section. 
+Library: epub.js
+How it works: You initialize a "book" object from the uploaded file.
+
+javascript --
+
+import ePub from 'epubjs';
+
+const handleFileUpload = async (file) => {
+  const book = ePub(await file.arrayBuffer());
+  const metadata = await book.loaded.metadata;
+  console.log(metadata.title, metadata.creator); // 'creator' is the author
+};
+Use code with caution.
+
+2. PDF Files (Hit or Miss) 
+PDFs have a metadata object, but it’s often left blank or filled with "Microsoft Word" if the user converted it poorly.
+Library: pdf.js
+How it works: You load the document and call getMetadata(). 
+javascript
+import * as pdfjsLib from 'pdfjs-dist';
+
+const getPdfInfo = async (file) => {
+  const loadingTask = pdfjsLib.getDocument(await file.arrayBuffer());
+  const pdf = await loadingTask.promise;
+  const { info } = await pdf.getMetadata();
+  console.log(info.Title, info.Author);
+};
+Use code with caution.
+
+3. TXT Files (The Hardest) 
+Plain text files have no metadata. You have to "guess" by looking at the content.
+Strategy: Read the first 10–20 lines of the file. Look for common patterns like: 
+The first line (often the title).
+A line starting with "By..." (the author).
+Code approach:
+javascript
+const getTxtInfo = async (file) => {
+  const text = await file.text();
+  const lines = text.split('\n').slice(0, 10); // Check first 10 lines
+  const title = lines[0].trim();
+  const authorLine = lines.find(l => l.toLowerCase().includes('by '));
+  const author = authorLine ? authorLine.replace(/by /i, '').trim() : 'Unknown';
+  return { title, author };
+};

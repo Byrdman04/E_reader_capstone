@@ -1,63 +1,22 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import Sidebar from '../components/Sidebar';
 import DashboardHeader from '../components/DashboardHeader';
 import DocumentCard from '../components/DocumentCard';
 import './Dashboard.css';
+import Book from '../components/BookDir/Book';
+import Collection from '../components/BookDir/Collection';
 
-// Mock data for documents
-const mockDocuments = [
-  {
-    id: '1',
-    title: 'Annual Report 2026',
-    uploadDate: 'March 15, 2026',
-    type: 'PDF Document',
-  },
-  {
-    id: '2',
-    title: 'Meeting Notes',
-    uploadDate: 'March 14, 2026',
-    type: 'Text Document',
-  },
-  {
-    id: '3',
-    title: 'Project Proposal',
-    uploadDate: 'March 13, 2026',
-    type: 'Word Document',
-  },
-  {
-    id: '4',
-    title: 'Budget Analysis',
-    uploadDate: 'March 12, 2026',
-    type: 'Excel Spreadsheet',
-  },
-  {
-    id: '5',
-    title: 'Marketing Strategy',
-    uploadDate: 'March 11, 2026',
-    type: 'PDF Document',
-  },
-  {
-    id: '6',
-    title: 'Research Paper',
-    uploadDate: 'March 10, 2026',
-    type: 'PDF Document',
-  },
-  {
-    id: '7',
-    title: 'Client Feedback',
-    uploadDate: 'March 9, 2026',
-    type: 'Text Document',
-  },
-  {
-    id: '8',
-    title: 'Product Roadmap',
-    uploadDate: 'March 8, 2026',
-    type: 'PowerPoint',
-  },
-];
+
 
 export default function Dashboard() {
-  const [documents] = useState(mockDocuments);
+  const myCollection = useMemo(() => {
+  const col = new Collection();
+  col.addBook(new Book(1, "The Great Gatsby", "F. Scott Fitzgerald", "Fiction", "epub","March 15, 2026", "/path/to/gatsby"));
+  col.addBook(new Book(2, "1984", "George Orwell", "Fiction", "pdf", "March 14, 2026", "/path/to/1984"));
+  col.addBook(new Book(3, "To Kill a Mockingbird", "Harper Lee", "Fiction", "txt", "March 13, 2026", "/path/to/mockingbird"));
+  return col;
+}, []);
+
 
   return (
     <div className="dashboard-container">
@@ -72,8 +31,19 @@ export default function Dashboard() {
         {/* Document Grid */}
         <main className="dashboard-grid-container">
           <div className="dashboard-documents-grid">
-            {documents.map((doc) => (
-              <DocumentCard key={doc.id} {...doc} />
+            {/* What this does is map through the collection and display each document */}
+            {myCollection.getCollection().map((doc) => (
+              /* 1. The DocumentCard component  is created for each book in the collection
+                2. key={doc.id} gives each card a unique identifier for tracking updating and deleation.
+                3. The {...doc} takes all the properties of the book object and passes them
+                  To the DocumentCard component to create the card instace for that object.
+                  
+                  Note: changed {...doc} to only taking specific info from the book object.*/
+              <DocumentCard key={doc.id} 
+              title={doc.title}
+              uploadDate={doc.uploadDate}
+              type={doc.fileType}
+              />
             ))}
           </div>
         </main>

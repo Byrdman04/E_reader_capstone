@@ -15,14 +15,18 @@ Basic book class:
     title = ""
     author = ""
     genre = ""
+    fileType = ""
+    uploadDate = ""
     path = ""
 
     //constructor
-    constructor(id, title, author, genre, path) {
+    constructor(id, title, author, genre, fileType, uploadDate, path) {
         this.id = id;
         this.title = title;
         this.author = author;
         this.genre = genre;
+        this.fileType = fileType;
+        this.uploadDate = uploadDate;
         this.path = path;
     }
 
