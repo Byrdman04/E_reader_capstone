@@ -18,18 +18,21 @@ export default function Profile() {
           <ArrowLeft size={32} />
         </button>
 
-        {/* Profile Info */}
-        <div className="profile-info">
-          <div className="profile-avatar">
-            <User size={48} />
+        {/* Two Column Layout */}
+        <div className="profile-header-content">
+          {/* Left Column - Profile Info */}
+          <div className="profile-info">
+            <div className="profile-avatar">
+              <User size={48} />
+            </div>
+            <h2 className="profile-name">John Doe</h2>
           </div>
-          <h2 className="profile-name">John Doe</h2>
-        </div>
 
-        {/* Files Uploaded Stats */}
-        <div className="profile-stats">
-          <h3 className="profile-stats-label">Files Uploaded</h3>
-          <p className="profile-stats-number">42</p>
+          {/* Right Column - Files Uploaded Stats */}
+          <div className="profile-stats">
+            <h3 className="profile-stats-label">Files Uploaded</h3>
+            <p className="profile-stats-number">42</p>
+          </div>
         </div>
 
         {/* Settings Icon */}

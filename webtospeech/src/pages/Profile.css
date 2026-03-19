@@ -14,6 +14,17 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+}
+
+/* Two Column Layout */
+.profile-header-content {
+  display: flex;
+  gap: 4rem;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 900px;
 }
 
 /* Back Arrow Button */
@@ -61,8 +72,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 1rem;
-  margin-bottom: 2rem;
+  flex: 1;
 }
 
 .profile-avatar {
@@ -87,6 +97,7 @@
 /* Stats Section */
 .profile-stats {
   text-align: center;
+  flex: 1;
 }
 
 .profile-stats-label {
@@ -144,6 +155,11 @@
 
 /* Responsive Design */
 @media (max-width: 640px) {
+  .profile-header-content {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
   .profile-header {
     padding: 1.5rem;
     min-height: 300px;
