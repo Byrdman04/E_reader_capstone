@@ -13,30 +13,64 @@ function Profile() {
         navigate('/');
     };*/
 
+    const collections = [
+    { id: 1, name: 'Collection Name' },
+    { id: 2, name: 'Collection Name' },
+    { id: 3, name: 'Collection Name' },
+  ];
+
     return (
-        <div className="Profile">
-            <div id="profile-banner">
-                <div className="column">
-                    {/*<h1>PFP Goes Here</h1>*/}
-                    <img id="profile-picture" src={pfp} alt="User's profile icon"></img>
-                    <p className="banner-text">User's Profile</p>
-                </div>
+        <div className="profile-container">
+      {/* Return to Dashboard */}
+      <Link to="/" className="return-link">
+        <ArrowLeft />
+        <span onClick={loadDashboardPage}>Return to Dashboard</span>
+      </Link>
 
-                <div className="column">
-                    <h1>Documents Uploaded</h1>
-                    <p className="header-styling">42</p>
-                </div>
-            </div>
-
-            <div id="profile-collections-table">
-
-            </div>
-
-            {/*<h1>This will be the Profile page</h1>
-            <button onClick={loadDashboardPage}>Go to Dashboard</button>
-            <button onClick={loadLoginPage}>Go to Login</button>*/}
+      {/* Profile Header */}
+      <div className="profile-header">
+        <div className="profile-left">
+          <div className="profile-avatar">
+            <User />
+          </div>
+          <div className="profile-name">Username's Profile</div>
         </div>
-    );
+
+        <div className="profile-stats">
+          <div className="stat-item">
+            <div className="stat-label">Files Uploaded</div>
+            <div className="stat-value">24</div>
+          </div>
+          <div className="stat-item">
+            <div className="stat-label">Documents Completed</div>
+            <div className="stat-value">4</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Collections Section */}
+      <div className="collections-section">
+        <h2 className="collections-title">Collections</h2>
+        <div className="collections-border"></div>
+        
+        <div className="collections-content">
+          <div className="collections-list">
+            {collections.map((collection) => (
+              <div key={collection.id} className="collection-row">
+                <span className="collection-name">{collection.name}</span>
+                <button className="collection-view-button">View</button>
+              </div>
+            ))}
+          </div>
+
+          <div className="collections-placeholder">
+            <div className="placeholder-question">?</div>
+          </div>
+        </div>
+      </div>
+      <button onClick={loadLoginPage}>Go to Login</button>
+    </div>
+  );
 }
 
 export default Profile;

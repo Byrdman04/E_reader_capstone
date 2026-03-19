@@ -3,66 +3,34 @@ class Book {
 Basic book class:
     -Attributes
     -Consructor
-    -Getters and Setters
     -Add Genre method(Allows books to have multiple genres)
+
+    NOTES: 
+    1. Didn't know that JS made the getters and setter for you, so I got 
+    rid of the ones I made before. 
 */
 
 //Attributes
-    Id = null
-    Title = ""
-    Author = ""
-    Genre = ""
-    Path = ""
+    id = null
+    title = ""
+    author = ""
+    genre = ""
+    path = ""
 
     //constructor
     constructor(id, title, author, genre, path) {
-        this.Id = id,
-        this.Title = title,
-        this.Author = author,
-        this.Genre = genre,
-        this.Path = path
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.genre = genre;
+        this.path = path;
     }
 
-    //Getters and Setters
-    getId() {
-        return this.Id
-    }
-    setID(id){
-        this.Id=id
-    }
-
-    getTitle(){
-        return this.Title
-    }
-    setTitle(title){
-        this.Title=title
-    }
-
-    getAuthor(){
-        return this.Author
-    }
-    setAuthor(author){
-        this.Author=author
-    }
-
-    getGenre(){
-        return this.Genre
-    }
-    setGenre(genre){
-        this.Genre=genre
-    }
-
-    getPath(){
-        return this.Path
-    }
-    setPath(path){
-        this.Path=path
-    }
-
+    
     //AddGenre method 
     //this will add a genere to the book.
     addGenre(genre){
-        this.Genre=this.Genre+","+genre 
+        this.genre=this.genre+","+genre 
     }
 
 
