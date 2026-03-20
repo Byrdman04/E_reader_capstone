@@ -1,4 +1,6 @@
-import { /*useState,*/ useMemo } from 'react';
+import { useState, useMemo } from 'react';
+//import { useNavigate } from 'react-router';
+import { Menu, X } from 'lucide-react';
 import Sidebar from '../components/Sidebar';
 import DashboardHeader from '../components/DashboardHeader';
 import DocumentCard from '../components/DocumentCard';
@@ -17,11 +19,31 @@ export default function Dashboard() {
   return col;
 }, []);
 
+const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
     <div className="dashboard-container">
+      {/* Mobile Menu Button */}
+      <button 
+        className="dashboard-mobile-menu-btn"
+        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+        aria-label="Toggle menu"
+      >
+        {isSidebarOpen ? <X /> : <Menu />}
+      </button>
+
+      {/* Overlay for mobile */}
+      {isSidebarOpen && (
+        <div 
+          className="dashboard-sidebar-overlay"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <Sidebar />
+      <div className={`dashboard-sidebar-wrapper ${isSidebarOpen ? 'open' : ''}`}>
+        <Sidebar onNavigate={() => setIsSidebarOpen(false)} />
+      </div>
 
       {/* Main Content */}
       <div className="dashboard-main-content">

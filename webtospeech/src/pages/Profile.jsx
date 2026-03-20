@@ -1,9 +1,12 @@
-import { ArrowLeft, User, Settings } from 'lucide-react';
+import { ArrowLeft, User, Settings, LogOut } from 'lucide-react';
 import { useNavigate } from 'react-router';
+import { supabase } from '../supabaseClient'
 import './Profile.css';
 
 export default function Profile() {
   const navigate = useNavigate();
+
+  
 
   return (
     <div className="profile-container">
@@ -52,6 +55,18 @@ export default function Profile() {
           <li className="profile-collection-item">Collection 2</li>
           <li className="profile-collection-item">Collection 3</li>
         </ul>
+
+        {/* Logout Button */}
+        <button 
+          className="profile-logout-button"
+          onClick={async () => {
+            supabase.auth.signOut();
+            navigate("/");
+          }}
+        >
+          <LogOut size={20} />
+          Logout
+        </button>
       </section>
     </div>
   );

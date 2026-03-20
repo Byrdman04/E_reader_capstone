@@ -7,7 +7,7 @@ import LoginMenu from '../components/LoginMenu'
 function Login() {
   const navigate = useNavigate();
 
-  const loadLoginPage = () => {
+  const loadTemplatePage = () => {
     navigate('/reactTemplate');
   };
 
@@ -19,33 +19,41 @@ function Login() {
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session)
-    })
+      setSession(data.session);
+    });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (_event, session) => {
-        setSession(session)
+        setSession(session);
+
+        //Making the redirect 
+      if(session) {
+        navigate('/dashboard');
+      }
       }
     )
 
     return () => {
       subscription.unsubscribe()
-    }
-  }, [])
+    };
+  }, [navigate])
 
   return (
     <>
       <div className="Login">
         <h1>This will be the Login page</h1>
 
-        <button onClick={loadLoginPage}>Go to ReactTemplate</button>
+        <button onClick={loadTemplatePage}>Go to ReactTemplate</button>
       </div>
 
 
       {session ? (
         <div>
           <h2>Welcome {session.user.email}</h2>
-          <button onClick={() => supabase.auth.signOut()}>
+          <button onClick={async () => {
+            await supabase.auth.signOut();
+            
+          }}>
             Logout
           </button>
           <button onClick={loadDashboardPage}>Go to Dashboard</button>
