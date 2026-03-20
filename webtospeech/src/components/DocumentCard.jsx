@@ -1,10 +1,15 @@
 import { File, MoreVertical } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import './DocumentCard.css';
 
 //
 export default function DocumentCard({ title, uploadDate, type }) {
+  const navigate = useNavigate();
+
+  
   return (
-    <div className="document-card-wrapper">
+    //Makes the cards clickable and navigates to the document page when clicked
+    <div className="document-card-wrapper" onClick={() => navigate('/document')}>
       {/* Card */}
       <div className="document-card">
         <div className="document-card-content">

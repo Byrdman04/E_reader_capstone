@@ -1,8 +1,13 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Pause, Play, Volume2, Bookmark, Type, Palette, X } from 'lucide-react';
 import './Document.css';
 
 function Document() {
+  //Nav Init
+    const navigate = useNavigate();
+
+
     const [isPlaying, setIsPlaying] = useState(false);
   const [speed, setSpeed] = useState(1);
   const [volume, setVolume] = useState(75);
@@ -46,7 +51,7 @@ She chose to follow the story. After all, wasn't that what she had always done?`
     <div className="ereader-container" style={{ backgroundColor: currentTheme.bg, color: currentTheme.text }}>
       {/* Header */}
       <header className="header">
-        <button className="back-button" aria-label="Go back">
+        <button className="back-button" aria-label="Go back" onClick= {() => navigate('/dashboard')}>
           <ArrowLeft size={32} strokeWidth={3} />
         </button>
         <h1 className="app-title">WebToSpeech</h1>
