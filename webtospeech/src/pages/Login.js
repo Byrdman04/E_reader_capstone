@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react'
-import  {supabase}  from '../supabaseClient'
+import { supabase } from '../supabaseClient'
 import LoginMenu from '../components/LoginMenu'
 
 
@@ -22,26 +22,26 @@ function Login() {
       setSession(data.session)
     })
 
-    const { data: listener } = supabase.auth.onAuthStateChange(
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         setSession(session)
       }
     )
 
     return () => {
-      listener.unsubscribe()
+      subscription.unsubscribe()
     }
   }, [])
 
   return (
     <>
       <div className="Login">
-       <h1>This will be the Login page</h1>
+        <h1>This will be the Login page</h1>
 
-       <button onClick={loadLoginPage}>Go to ReactTemplate</button>
+        <button onClick={loadLoginPage}>Go to ReactTemplate</button>
       </div>
 
-      
+
       {session ? (
         <div>
           <h2>Welcome {session.user.email}</h2>
