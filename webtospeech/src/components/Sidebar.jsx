@@ -2,10 +2,13 @@ import { User, FolderPlus, Upload } from 'lucide-react';
 import { useNavigate } from 'react-router';
 import { useState } from 'react';
 import './Sidebar.css';
+import UploadModal from '../components/Upload';
 
 export default function Sidebar({ onNavigate }) {
   const navigate = useNavigate();
   const [selectedCollection, setSelectedCollection] = useState(null);
+  const [showUpload, setShowUpload] = useState(false);
+
   
   // Mock collections data
   const collections = [
@@ -22,6 +25,7 @@ export default function Sidebar({ onNavigate }) {
   };
 
   return (
+    <>
     <aside className="sidebar">
       {/* User Profile */}
       <button 
@@ -65,9 +69,14 @@ export default function Sidebar({ onNavigate }) {
       </div>
 
       {/* Upload Button */}
-      <button className="sidebar-upload">
+      <button className="sidebar-upload" onClick={() => setShowUpload(true)}>
         <Upload />
       </button>
     </aside>
+
+    {showUpload && (
+      <UploadModal onClose={() => setShowUpload(false)}/>
+    )}
+    </>
   );
 }
