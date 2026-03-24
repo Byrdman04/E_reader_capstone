@@ -71,7 +71,6 @@ export default function Sidebar({ onNavigate }) {
       {/* Upload Button */}
       <button className="sidebar-upload" onClick={() => setShowUpload(true)}>
         <Upload />
-        Upload 
       </button>
     </aside>
 

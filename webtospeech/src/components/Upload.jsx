@@ -44,17 +44,20 @@ async function handleFileUpload(){
 
     try {
         //uploads file to the storage
-        const { data, error } = await supabase.storage.from('books').upload(fileName, file);
+        const { data, error: uploadError } = await supabase.storage.from('books').upload(fileName, file);
         
+        if (uploadError) throw uploadError;
 
         const { error: dbError } = await supabase
                     .from('books')
-                    .insert({
+                    .insert([{
                         title: title,
                         author: author,
                         genre: genre,
                         file_path: fileName
-                    });
+                    }]).select();
+
+                    console.log("DB Insert Result:", { data, dbError });
 
                 if (dbError) throw dbError;
 
@@ -62,7 +65,7 @@ async function handleFileUpload(){
 
             // Auto close the modal after 1.5 seconds on success
             setTimeout(() => onClose(), 1500);
-    } catch {
+    } catch (err) {
         console.error("Upload Failed:", err);
         setStatus(UploadStatus.ERROR)
     };
