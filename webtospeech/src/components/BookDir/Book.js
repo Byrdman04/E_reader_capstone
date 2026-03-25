@@ -14,17 +14,17 @@ Basic book class:
     id = null
     title = ""
     author = ""
-    genre = ""
+    genres = [] //genre is an array to allow for multiple genres
     fileType = ""
     uploadDate = ""
     path = ""
 
     //constructor
-    constructor(id, title, author, genre, fileType, uploadDate, path) {
+    constructor(id, title, author, genres = [], fileType, uploadDate, path) {
         this.id = id;
         this.title = title;
         this.author = author;
-        this.genre = genre;
+        this.genres = Array.isArray(genres) ? genres : [genres]; // Ensure genre is always an array
         this.fileType = fileType;
         this.uploadDate = uploadDate;
         this.path = path;
@@ -33,8 +33,14 @@ Basic book class:
     
     //AddGenre method 
     //this will add a genere to the book.
-    addGenre(genre){
-        this.genre=this.genre+","+genre 
+    addGenre(genres){
+        if(!this.genres.includes(genres)){
+            this.genres.push(genres);
+        }
+    }
+
+    hasGenre(slug){
+        return this.genres.some(g => g.slug === slug);
     }
 
 

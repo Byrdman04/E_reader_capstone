@@ -1,5 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 
 //Conststant Status Strings that will be tied to the upload process.
 const UploadStatus = {
@@ -21,7 +21,28 @@ const[status, setStatus] = useState(UploadStatus.IDLE);
 
 const [title, setTitle] = useState('');
 const [author, setAuthor] = useState('');
-const [genre, setGenre] = useState('');
+const [selectedGenreIds, setSelectedGenreIds] = useState([]);  // ← array of IDs
+const [allGenres, setAllGenres] = useState([]);                 // ← fetched from DB
+
+    // Fetch genres from Supabase when modal opens
+    useEffect(() => {
+        async function loadGenres() {
+            const { data } = await supabase
+                .from('genres')
+                .select('*')
+                .order('name');
+            if (data) setAllGenres(data);
+        }
+        loadGenres();
+    }, []);
+
+    function toggleGenre(genreId) {
+        setSelectedGenreIds(prev =>
+            prev.includes(genreId)
+                ? prev.filter(id => id !== genreId)   // deselect
+                : [...prev, genreId]                   // select
+        );
+    }
 
 //This function stores the 1 and only file that is chosen by the 
 //user and sets it to the file useState variable.
@@ -35,31 +56,56 @@ function handleFileChange(e) {
 async function handleFileUpload(){
     if (!file) return;
 
+    const { data: { user} } = await supabase.auth.getUser();
+    if (!user) {
+        alert("You must be logged in to upload a book.");
+        return;
+    }
+
     setStatus(UploadStatus.UPLOADING);
 
     //Creates unique file path
-    const fileName = `${Date.now()}_${file.name}`;
+    const fileName = `${user.id}/${file.name}`;
 
     
 
     try {
         //uploads file to the storage
-        const { data, error: uploadError } = await supabase.storage.from('books').upload(fileName, file);
+        const { data: storageData, error: uploadError } = await supabase.storage
+            .from('user-books')
+            .upload(fileName, file);
         
         if (uploadError) throw uploadError;
 
-        const { error: dbError } = await supabase
+        const { data: book,error: dbError } = await supabase
                     .from('books')
                     .insert([{
-                        title: title,
-                        author: author,
-                        genre: genre,
-                        file_path: fileName
-                    }]).select();
+                        title,
+                        author,
+                        cover_url: null,
+                        file_url: fileName,
+                        uploaded_by: user.id,
+                        is_community: false
+                    }]).select().single();
 
-                    console.log("DB Insert Result:", { data, dbError });
+                    console.log("DB Insert Result:", { storageData, dbError });
 
                 if (dbError) throw dbError;
+                if (!book) throw new Error("Book insert returned no data");  // safety check
+
+                //Linking genres ro books
+                if(selectedGenreIds.length > 0){
+                    const { error: genreLinkError } = await supabase
+                        .from('book_genres')
+                        .insert(
+                            selectedGenreIds.map(genre_id => ({
+                                book_id: book.id,
+                                genre_id: genre_id
+                            }))
+                        );
+                    if (genreLinkError) throw genreLinkError;
+                }
+
 
             setStatus(UploadStatus.SUCCESS);
 
@@ -95,12 +141,22 @@ async function handleFileUpload(){
                         value={author}
                         onChange={(e) => setAuthor(e.target.value)}
                     />
-                    <input
-                        type="text"
-                        placeholder="Genre"
-                        value={genre}
-                        onChange={(e) => setGenre(e.target.value)}
-                    />
+
+                    {/* Genre toggle buttons instead of a text field */}
+                    <div className="genre-picker">
+                        <p>Genres:</p>
+                        {allGenres.map(g => (
+                            <button
+                                key={g.id}
+                                type="button"
+                                className={selectedGenreIds.includes(g.id) ? 'genre-tag active' : 'genre-tag'}
+                                onClick={() => toggleGenre(g.id)}
+                            >
+                                {g.name}
+                            </button>
+                        ))}
+                    </div>
+
                     <input
                         type="file"
                         accept=".txt"

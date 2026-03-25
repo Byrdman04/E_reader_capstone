@@ -55,6 +55,11 @@ class Collection {
         return this.collectionArray.find(book => book.title === findTitle);
     }
 
+    filterByFenre(slug){
+        if(!slug) return this.collectionArray; // If no slug provided, return all books
+        return this.collectionArray.filter(book => book.hasGenre(slug));
+    }
+
 }
 
 export default Collection;
