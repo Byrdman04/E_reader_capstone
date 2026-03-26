@@ -6,11 +6,18 @@
   background-color: var(--brand-red);
 }
 
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    /* fill the fullscreen wrapper */
+  }
+}
+
 .sidebar-user-profile {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1.5rem 0;
+  padding: 1.15rem 0;
   background: none;
   border: none;
   cursor: pointer;
@@ -157,50 +164,54 @@
 }
 
 .modal-overlay {
-    position: fixed;           /* covers the whole screen */
-    top: 15%;
-    left: 15%;
-    width: 75%;
-    height: 75%;
-    background: rgb(194, 189, 189);  /* dark transparent background */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;             /* sits on top of everything */
+  position: fixed;
+  /* covers the whole screen */
+  top: 15%;
+  left: 15%;
+  width: 75%;
+  height: 75%;
+  background: rgb(194, 189, 189);
+  /* dark transparent background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  /* sits on top of everything */
 }
 
 .modal-content {
-    background: white;
-    border-radius: 8px;
-    width: 480px;
-    max-width: 90%;            /* shrinks on small screens */
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+  background: white;
+  border-radius: 8px;
+  width: 480px;
+  max-width: 90%;
+  /* shrinks on small screens */
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .modal-close {
-    background: none;
-    border: none;
-    font-size: 1.2rem;
-    cursor: pointer;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
 }
 
 .modal-body {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .modal-footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: 8px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
 }
