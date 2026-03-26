@@ -175,7 +175,7 @@ She chose to follow the story. After all, wasn't that what she had always done?`
                 step="1"
                 value={fontSize}
                 onChange={(e) => setFontSize(parseInt(e.target.value))}
-                style={{ width: '100%', background: '#ddd' }}
+                style={{ width: '100%', background: '#9b1c1c' }}
               />
               <p className="preview-text" style={{ fontSize: `${fontSize}px`, marginTop: '16px' }}>
                 Preview: The quick brown fox jumps over the lazy dog.
