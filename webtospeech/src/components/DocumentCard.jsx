@@ -3,13 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import './DocumentCard.css';
 
 //
-export default function DocumentCard({ title, uploadDate, type }) {
+export default function DocumentCard({ id, title, uploadDate, type }) {
   const navigate = useNavigate();
 
   
   return (
     //Makes the cards clickable and navigates to the document page when clicked
-    <div className="document-card-wrapper" onClick={() => navigate('/document')}>
+    <div className="document-card-wrapper" onClick={() => navigate(`/document/${id}`)}>
       {/* Card */}
       <div className="document-card">
         <div className="document-card-content">

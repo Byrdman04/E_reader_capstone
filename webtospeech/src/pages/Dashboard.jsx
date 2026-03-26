@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 //import { useNavigate } from 'react-router';
 import { Menu, X } from 'lucide-react';
 import Sidebar from '../components/Sidebar';
@@ -7,17 +7,59 @@ import DocumentCard from '../components/DocumentCard';
 import './Dashboard.css';
 import Book from '../components/BookDir/Book';
 import Collection from '../components/BookDir/Collection';
+import { createClient } from "@supabase/supabase-js"; 
 
-
+// Initialize Supabase client
+const supabase = createClient(process.env.REACT_APP_SUPABASE_URL, process.env.REACT_APP_SUPABASE_ANON_KEY);
 
 export default function Dashboard() {
+
+  const [books, setBooks] = useState(null);
+  const [fetchError, setFetchError] = useState(null);
+
+  useEffect(() => {
+    const fetchBooks = async () => {
+      const { data: { user} } = await supabase.auth.getUser();
+    if (!user) {
+        alert("You must be logged in to upload a book.");
+        return;
+    }
+
+//this is the fetching from the DB 
+const { data, error } = await supabase
+  .from('books')
+  .select('id, title, author, file_url, created_at')
+  .eq('uploaded_by', user.id);
+
+  if(error){
+    setFetchError("Could not fetch books");
+    setBooks(null);
+    console.log(error);
+  }
+  if(data){
+    setBooks(data);
+    setFetchError(null);
+  }
+
+  console.log(data, error);
+  
+  
+    }
+    //Makes it continuous or something. 
+    fetchBooks()
+  }, []);
+  
+
+
   const myCollection = useMemo(() => {
   const col = new Collection();
-  col.addBook(new Book(1, "The Great Gatsby", "F. Scott Fitzgerald", "Fiction", "epub","March 15, 2026", "/path/to/gatsby"));
-  col.addBook(new Book(2, "1984", "George Orwell", "Fiction", "pdf", "March 14, 2026", "/path/to/1984"));
-  col.addBook(new Book(3, "To Kill a Mockingbird", "Harper Lee", "Fiction", "txt", "March 13, 2026", "/path/to/mockingbird"));
+  if (books !== null) {
+    books.forEach((book) => {
+      col.addBook(new Book(book.id, book.title, book.author, "Fiction", book.file_type, book.created_at, book.file_url));
+    });
+  }
   return col;
-}, []);
+}, [books]);
 
 const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -62,6 +104,7 @@ const [isSidebarOpen, setIsSidebarOpen] = useState(false);
                   
                   Note: changed {...doc} to only taking specific info from the book object.*/
               <DocumentCard key={doc.id} 
+              id = {doc.id}
               title={doc.title}
               uploadDate={doc.uploadDate}
               type={doc.fileType}

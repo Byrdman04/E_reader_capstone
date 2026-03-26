@@ -1,14 +1,23 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Pause, Play, Volume2, Bookmark, Type, Palette, X } from 'lucide-react';
 import './Document.css';
+import { createClient } from "@supabase/supabase-js"; 
+
+const supabase = createClient(process.env.REACT_APP_SUPABASE_URL, process.env.REACT_APP_SUPABASE_ANON_KEY);
+
 
 function Document() {
-  //Nav Init
-    const navigate = useNavigate();
+  //Vars needed for fetching the document and displaying it.
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const[content, setContent] = useState(""); 
+  const[title, setTitle] = useState("");
+  const[loading, setLoading] = useState(true);
+  const[error, setError] = useState(null);
 
 
-    const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [speed, setSpeed] = useState(1);
   const [volume, setVolume] = useState(75);
   const [isBookmarked, setIsBookmarked] = useState(false);
@@ -23,28 +32,56 @@ function Document() {
     dark: { bg: '#1a1a1a', text: '#e0e0e0' },
 }
 
-const sampleText = `Chapter 1: The Beginning
+  useEffect(() => {
+    const loadDocument = async () => {
+      try {
+        //get doc info from the DB 
+        const { data, error } = await supabase
+          .from('books')
+          .select('title, file_url')
+          .eq('id', id)
+          .single();
 
-In the heart of a bustling city, where ancient architecture met modern innovation, there lived a woman named Elena who had dedicated her life to uncovering forgotten stories.
+        if (error) {
+          setError("Could not load document");
+          setLoading(false);
+          console.log(error);
+          return;
+        }
 
-Her small apartment, tucked away on the third floor of a building that had witnessed a century of change, was filled with books, manuscripts, and artifacts from different eras. Each object held a story, and Elena believed that every story deserved to be told.
+        setTitle(data.title);
 
-One rainy autumn evening, as the city lights reflected off the wet cobblestones below, Elena received a mysterious package. There was no return address, only her name written in elegant calligraphy on the brown paper wrapping.
+        //fetch the file from the bucket using the URL 
+        const {data: fileData, error: fileError} = await supabase.storage
+        .from('user-books')
+        .download(data.file_url);
+        if (fileError) {
+          throw new Error("Failed to fetch document content");
+        }
+        //setting it to our useState 
+        const text = await fileData.text();
+        console.log("File content:", text);
+        setContent(text);
+      }
+        catch (err) {
+          setError(err.message);
+          console.log(err);
+        }
+        finally {
+          setLoading(false);
+        }
+    };
 
-Inside, she found an old leather-bound journal, its pages yellowed with age but remarkably well-preserved. The first entry was dated 1847, and as Elena began to read, she realized this was no ordinary diary—it was a chronicle of a secret society that had operated in the shadows of history.
+    loadDocument();
+  }, [id]);
 
-The journal spoke of hidden chambers beneath the city, of codes and ciphers, of meetings held under the cover of darkness. It mentioned names she recognized from history books, but in contexts she had never imagined.
+if (loading) {
+  return <div className="loading">Loading document...</div>;
+}
 
-Elena's heart raced with excitement. This was the kind of discovery that historians dreamed about—a primary source that could rewrite what they thought they knew about the past.
-
-But as she delved deeper into the journal's secrets, she began to notice something unsettling. Someone was watching her apartment. Strange figures lingered on the street corner below. Her phone would ring, but no one would speak when she answered.
-
-The past, it seemed, was not content to remain buried. And those who had kept its secrets for nearly two centuries were not pleased that their story was being brought to light.
-
-Elena knew she had a choice to make: return to the safety of her academic research, or follow the trail that this mysterious journal had laid before her—a trail that led into the unknown depths of the city, and perhaps into danger.
-
-She chose to follow the story. After all, wasn't that what she had always done?`;
-
+if (error) {
+  return <div className="error">{error}</div>;
+}
   const currentTheme = themes[theme];
 
   return (
@@ -61,7 +98,12 @@ She chose to follow the story. After all, wasn't that what she had always done?`
       <main className="main-content">
         <div className="document-container">
           <div className="document-text" style={{ fontSize: `${fontSize}px` }}>
-            {sampleText}
+            {content.split('\n').map((line, index) => (
+                    // Each line of the txt file becomes its own paragraph
+                    <p key={index} className="document-line">
+                        {line}  
+                    </p>
+                ))}
           </div>
         </div>
       </main>
