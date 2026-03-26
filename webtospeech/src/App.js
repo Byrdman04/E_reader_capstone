@@ -11,7 +11,7 @@ function App() {
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/document" element={<Document />} />
+      <Route path="/document/:id" element={<Document />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/reactTemplate" element={<ReactTemplate />} />
     </Routes>

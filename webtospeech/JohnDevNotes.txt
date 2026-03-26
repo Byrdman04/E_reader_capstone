@@ -73,3 +73,10 @@ Will need to make:
     - Upload files using users ID 
 ----------------------------------------------------------------------
 
+
+Plan for Annotations
+1. Make a test project that focuses on Taking a txt document and making an annotation.
+  a. Variables needed to get from the annotation are where it start and ends.
+NOTE: I should be able to reload it with the changes.
+2. (OPTIONAL) Make the set colors that they can be and save that too.
+3. get it to work on our project send it to the db and have it where it loads with the changes. 
