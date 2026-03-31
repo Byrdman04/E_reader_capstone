@@ -11,6 +11,14 @@
     width: 100%;
     /* fill the fullscreen wrapper */
   }
+
+  .sidebar-collections {
+    max-height: 50%;
+  }
+
+  .sidebar-search {
+    margin-top: 0px !important;
+  }
 }
 
 .sidebar-user-profile {
