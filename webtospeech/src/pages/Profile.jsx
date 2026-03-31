@@ -1,19 +1,35 @@
 import { ArrowLeft, User, Settings, LogOut } from 'lucide-react';
 import { useNavigate } from 'react-router';
+import { useEffect } from 'react';
 import { supabase } from '../supabaseClient'
 import './Profile.css';
 
 export default function Profile() {
   const navigate = useNavigate();
 
-  
+  async function loadUserInfo() {
+    const { data: { user } } = await supabase.auth.getUser();
+    return user;
+  }
+
+  useEffect(() => {
+    loadUserInfo().then((data) => {
+      const displayName = document.getElementsByClassName('profile-name')[0];
+      const profilePicture = document.getElementsByClassName('profile-avatar')[0];
+
+      displayName.innerText = data.user_metadata.name;
+      profilePicture.innerHTML = ''; // Remove placeholder SVG
+      profilePicture.style.backgroundImage = `url(${data.user_metadata.avatar_url})`;
+      profilePicture.style.backgroundPosition = 'center';
+    });
+  }, []);
 
   return (
     <div className="profile-container">
       {/* Header Section */}
       <header className="profile-header">
         {/* Back Arrow */}
-        <button 
+        <button
           className="profile-back-button"
           onClick={() => navigate('/dashboard')}
           aria-label="Back to dashboard"
@@ -39,7 +55,7 @@ export default function Profile() {
         </div>
 
         {/* Settings Icon */}
-        <button 
+        <button
           className="profile-settings-button"
           aria-label="Settings"
         >
@@ -57,7 +73,7 @@ export default function Profile() {
         </ul>
 
         {/* Logout Button */}
-        <button 
+        <button
           className="profile-logout-button"
           onClick={async () => {
             supabase.auth.signOut();
