@@ -16,7 +16,7 @@
 .dashboard-mobile-menu-btn {
   display: none;
   position: fixed;
-  top: 1rem;
+  top: 0.3rem;
   left: 1rem;
   z-index: 1001;
   padding: 0.5rem;
@@ -28,8 +28,8 @@
 }
 
 .dashboard-mobile-menu-btn svg {
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 2rem;
+  height: 2rem;
   color: white;
 }
 
