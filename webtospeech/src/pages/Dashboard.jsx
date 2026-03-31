@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 //import { useNavigate } from 'react-router';
 import { Menu, X } from 'lucide-react';
 import Sidebar from '../components/Sidebar';
@@ -16,40 +16,61 @@ export default function Dashboard() {
 
   const [books, setBooks] = useState(null);
   const [fetchError, setFetchError] = useState(null);
-  console.log(fetchError); //This only exists to "use" the variable for no warning compilation.
+  
 
-  useEffect(() => {
-    const fetchBooks = async () => {
-      const { data: { user} } = await supabase.auth.getUser();
+  //Do useCallback to prevent infinite loop of useEffect and fetchBooks.
+  //Also it will cache the results of the function and only re-run it when the dependencies change.
+  const fetchBooks = useCallback(async (search = "") => {
+    const { data: { user} } = await supabase.auth.getUser();
     if (!user) {
-        alert("You must be logged in to upload a book.");
+      
+      alert("You must be logged in to upload a book.");
         return;
     }
 
-//this is the fetching from the DB 
-const { data, error } = await supabase
-  .from('books')
-  .select('id, title, author, file_url, created_at')
-  .eq('uploaded_by', user.id);
+    //this just creates the queary
+    let queary = supabase
+      .from('books')
+      .select('id, title, author, file_url, created_at')
+      .eq('uploaded_by', user.id);
 
-  if(error){
-    setFetchError("Could not fetch books");
-    setBooks(null);
-    console.log(error);
-  }
-  if(data){
-    setBooks(data);
-    setFetchError(null);
-  }
-
-  console.log(data, error);
-  
-  
+    //this will modify the if there is a search
+    if(search.trim() !== ""){
+    queary = queary.ilike('title', `%${search}%`);
+    //ilike ignores case for the search and the % is a wildcard that allows for partial matches. 
+    // So if the search is "Harry" it will match "Harry Potter" and "harry potter and the sorcerer's stone"
     }
+
+    //calls the queary on the DB and 
+    const { data, error } = await queary;
+
+    if(error){
+      setFetchError("Could not fetch books");
+      setBooks(null);
+      console.log(error);
+      console.log(fetchError);
+      return;
+    }
+
+    if(data){
+      setBooks(data);
+      setFetchError(null);
+    }
+
+    console.log(data, error);
+  
+  //dependency just to get rid of no use warning and error check.
+  }, [fetchError]);
+
+  //on search it will update the search state and call fetchBooks with the new search term.
+  const handleSearch = (str) => {
+    fetchBooks(str);
+  };
+  
+  useEffect(() => {
     //Makes it continuous or something. 
     fetchBooks()
-  }, []);
-  
+  }, [fetchBooks]);
 
 
   const myCollection = useMemo(() => {
@@ -91,7 +112,7 @@ const [isSidebarOpen, setIsSidebarOpen] = useState(false);
       {/* Main Content */}
       <div className="dashboard-main-content">
         {/* Header */}
-        <DashboardHeader />
+        <DashboardHeader outputSearch={handleSearch}/>
 
         {/* Document Grid */}
         <main className="dashboard-grid-container">
