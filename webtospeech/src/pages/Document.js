@@ -13,6 +13,7 @@ function Document() {
   const navigate = useNavigate();
   const[content, setContent] = useState(""); 
   const[title, setTitle] = useState("");
+  console.log(title); //This only exists to "use" the variable for no warning compilation.
   const[loading, setLoading] = useState(true);
   const[error, setError] = useState(null);
 

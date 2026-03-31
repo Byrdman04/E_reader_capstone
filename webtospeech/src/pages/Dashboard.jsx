@@ -16,6 +16,7 @@ export default function Dashboard() {
 
   const [books, setBooks] = useState(null);
   const [fetchError, setFetchError] = useState(null);
+  console.log(fetchError); //This only exists to "use" the variable for no warning compilation.
 
   useEffect(() => {
     const fetchBooks = async () => {
