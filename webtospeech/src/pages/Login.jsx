@@ -5,6 +5,8 @@ import LoginMenu from '../components/LoginMenu'
 
 
 function Login() {
+  sessionStorage.clear();
+
   const navigate = useNavigate();
 
   const loadTemplatePage = () => {

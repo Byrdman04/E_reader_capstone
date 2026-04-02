@@ -13,17 +13,31 @@ export default function Profile() {
   }
 
   useEffect(() => {
-    loadUserInfo().then((data) => {
+    function displayUserData(pfpUrl, userName) {
       const displayName = document.getElementsByClassName('profile-name')[0];
       const profilePicture = document.getElementsByClassName('profile-avatar')[0];
 
-      console.log(data);
-      displayName.innerText = data.user_metadata.name;
+      displayName.innerText = userName;
       profilePicture.innerHTML = ''; // Remove placeholder SVG
-      profilePicture.style.backgroundImage = `url(${data.user_metadata.avatar_url})`;
+      profilePicture.style.backgroundImage = `url(${pfpUrl})`;
       profilePicture.style.backgroundPosition = 'center';
       profilePicture.style.backgroundRepeat = 'no-repeat';
       profilePicture.style.backgroundSize = 'cover';
+    }
+
+    //If user data already cached, use existing info
+    if (sessionStorage.getItem("pfpUrl") && sessionStorage.getItem("username")) {
+      displayUserData(sessionStorage.getItem("pfpUrl"), sessionStorage.getItem("username"));
+      return;
+    }
+
+    //Otherwise, fetch the user data
+    loadUserInfo().then((data) => {
+      console.log(data);
+      displayUserData(data.user_metadata.avatar_url, data.user_metadata.name);
+
+      sessionStorage.setItem("pfpUrl", data.user_metadata.avatar_url);
+      sessionStorage.setItem("username", data.user_metadata.name);
     });
   }, []);
 
