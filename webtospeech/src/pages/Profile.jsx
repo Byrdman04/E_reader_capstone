@@ -17,10 +17,13 @@ export default function Profile() {
       const displayName = document.getElementsByClassName('profile-name')[0];
       const profilePicture = document.getElementsByClassName('profile-avatar')[0];
 
+      console.log(data);
       displayName.innerText = data.user_metadata.name;
       profilePicture.innerHTML = ''; // Remove placeholder SVG
       profilePicture.style.backgroundImage = `url(${data.user_metadata.avatar_url})`;
       profilePicture.style.backgroundPosition = 'center';
+      profilePicture.style.backgroundRepeat = 'no-repeat';
+      profilePicture.style.backgroundSize = 'cover';
     });
   }, []);
 
@@ -44,7 +47,7 @@ export default function Profile() {
             <div className="profile-avatar">
               <User size={48} />
             </div>
-            <h2 className="profile-name">John Doe</h2>
+            <h2 className="profile-name">&#8203;</h2>
           </div>
 
           {/* Right Column - Files Uploaded Stats */}
