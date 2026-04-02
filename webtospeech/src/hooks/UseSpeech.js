@@ -11,7 +11,8 @@ export function useSpeech(content) {
 
   // Cleanup on unmount
   useEffect(() => {
-    return () => synthRef.current.cancel();
+    const synth = synthRef.current; // capture it here
+    return () => synth.cancel();
   }, []);
 
   const handlePlayPause = () => {
