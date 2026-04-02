@@ -199,10 +199,11 @@
   max-width: 200px;
 }
 
+/* Volume Slider Length */
 .slider {
   -webkit-appearance: none;
   appearance: none;
-  width: 100%;
+  width: 25%;
   height: 6px;
   border-radius: 3px;
   background: rgba(255, 255, 255, 0.3);
