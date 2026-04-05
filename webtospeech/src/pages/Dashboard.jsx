@@ -58,6 +58,8 @@ export default function Dashboard() {
     }
 
     console.log(data, error);
+    //This should only ever get set for the total num of books, not for collections.
+    sessionStorage.setItem("numBooksUploaded", data.length);
   
   //dependency just to get rid of no use warning and error check.
   }, [fetchError]);

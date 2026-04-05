@@ -16,6 +16,7 @@ export default function Profile() {
     function displayUserData(pfpUrl, userName) {
       const displayName = document.getElementsByClassName('profile-name')[0];
       const profilePicture = document.getElementsByClassName('profile-avatar')[0];
+      const booksUploadedStat = document.getElementsByClassName('profile-stats-number')[0];
 
       displayName.innerText = userName;
       profilePicture.innerHTML = ''; // Remove placeholder SVG
@@ -23,6 +24,12 @@ export default function Profile() {
       profilePicture.style.backgroundPosition = 'center';
       profilePicture.style.backgroundRepeat = 'no-repeat';
       profilePicture.style.backgroundSize = 'cover';
+
+      if (sessionStorage.getItem("numBooksUploaded")) {
+        booksUploadedStat.innerText = sessionStorage.getItem("numBooksUploaded");
+      } else {
+        booksUploadedStat.innerText = 0;
+      }
     }
 
     //If user data already cached, use existing info
@@ -67,7 +74,7 @@ export default function Profile() {
           {/* Right Column - Files Uploaded Stats */}
           <div className="profile-stats">
             <h3 className="profile-stats-label">Files Uploaded</h3>
-            <p className="profile-stats-number">42</p>
+            <p className="profile-stats-number">&#8203;</p>
           </div>
         </div>
 
