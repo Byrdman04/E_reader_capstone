@@ -25,11 +25,7 @@ export default function Profile() {
       profilePicture.style.backgroundRepeat = 'no-repeat';
       profilePicture.style.backgroundSize = 'cover';
 
-      if (sessionStorage.getItem("numBooksUploaded")) {
-        booksUploadedStat.innerText = sessionStorage.getItem("numBooksUploaded");
-      } else {
-        booksUploadedStat.innerText = 0;
-      }
+      booksUploadedStat.innerText = sessionStorage.getItem("numBooksUploaded") || 0;
     }
 
     //If user data already cached, use existing info
@@ -40,13 +36,18 @@ export default function Profile() {
 
     //Otherwise, fetch the user data
     loadUserInfo().then((data) => {
+      if (!data){
+        alert("No user information loaded, please log in.");
+        navigate('/');
+      }
+
       console.log(data);
       displayUserData(data.user_metadata.avatar_url, data.user_metadata.name);
 
       sessionStorage.setItem("pfpUrl", data.user_metadata.avatar_url);
       sessionStorage.setItem("username", data.user_metadata.name);
     });
-  }, []);
+  }, [navigate]);
 
   return (
     <div className="profile-container">

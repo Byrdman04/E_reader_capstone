@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect, useCallback } from 'react';
-//import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 import { Menu, X } from 'lucide-react';
 import Sidebar from '../components/Sidebar';
 import DashboardHeader from '../components/DashboardHeader';
@@ -13,6 +13,7 @@ import { createClient } from "@supabase/supabase-js";
 const supabase = createClient(process.env.REACT_APP_SUPABASE_URL, process.env.REACT_APP_SUPABASE_ANON_KEY);
 
 export default function Dashboard() {
+  const navigate = useNavigate();
 
   const [books, setBooks] = useState(null);
   const [fetchError, setFetchError] = useState(null);
@@ -25,6 +26,7 @@ export default function Dashboard() {
     if (!user) {
       
       alert("You must be logged in to upload a book.");
+        navigate('/');
         return;
     }
 
@@ -62,7 +64,7 @@ export default function Dashboard() {
     sessionStorage.setItem("numBooksUploaded", data.length);
   
   //dependency just to get rid of no use warning and error check.
-  }, [fetchError]);
+  }, [fetchError, navigate]);
 
   //on search it will update the search state and call fetchBooks with the new search term.
   const handleSearch = (str) => {
