@@ -1,69 +1,58 @@
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react'
-import { supabase } from '../supabaseClient'
-import LoginMenu from '../components/LoginMenu'
-
+import { useEffect, useState } from 'react';
+import { supabase } from '../supabaseClient';
+import LoginMenu from '../components/LoginMenu';
+import './Login.css';
 
 function Login() {
   sessionStorage.clear();
-
   const navigate = useNavigate();
-
-  const loadTemplatePage = () => {
-    navigate('/reactTemplate');
-  };
-
-  const loadDashboardPage = () => {
-    navigate('/dashboard');
-  }
-
-  const [session, setSession] = useState(null)
+  const [session, setSession] = useState(null);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
     });
-
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         setSession(session);
-
-        //Making the redirect 
-      if(session) {
-        navigate('/dashboard');
+        if (session) {
+          navigate('/dashboard');
+        }
       }
-      }
-    )
-
+    );
     return () => {
-      subscription.unsubscribe()
+      subscription.unsubscribe();
     };
-  }, [navigate])
+  }, [navigate]);
 
   return (
-    <>
-      <div className="Login">
-        <h1>This will be the Login page</h1>
+    <div className="login-container">
+      {/* Top Header Bar */}
+      <header className="login-header">
+        <span className="logo-text-top">WebToSpeech</span>
+      </header>
 
-        <button onClick={loadTemplatePage}>Go to ReactTemplate</button>
-      </div>
-
-
-      {session ? (
-        <div>
-          <h2>Welcome {session.user.email}</h2>
-          <button onClick={async () => {
-            await supabase.auth.signOut();
-            
-          }}>
-            Logout
-          </button>
-          <button onClick={loadDashboardPage}>Go to Dashboard</button>
+      {/* Main Content Area */}
+      <main className="login-main">
+        <div className="logo-circle">
+        
+          <img src="WebToSpeech Logo.png" alt="WebToSpeech Logo" className="main-logo" />
         </div>
-      ) : (
-        <LoginMenu />
-      )}
-    </>
+
+        <p className="welcome-text">
+          Welcome to WebToSpeech! the all in one document storage and Text to Speech reader solution!
+        </p>
+
+        <div className="auth-section">
+        
+          <LoginMenu />
+        </div>
+      </main>
+
+      {/* Bottom Footer Bar */}
+      <footer className="login-footer"></footer>
+    </div>
   );
 }
 

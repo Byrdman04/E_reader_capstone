@@ -1,0 +1,81 @@
+
+
+:root {
+  --brand-red: #8b0000; 
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Georgia', serif;
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  text-align: center;
+}
+
+.login-header {
+  background-color: var(--brand-red);
+  padding: 15px 30px;
+  text-align: left;
+}
+
+.logo-text-top {
+  color: white;
+  font-style: italic;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.login-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.logo-circle {
+  width: 500px;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.main-logo {
+  width: 90%;
+  height: auto;
+}
+
+.welcome-text {
+  color: var(--brand-red);
+  font-style: italic;
+  font-size: 1.2rem;
+  max-width: 600px;
+  margin-bottom: 30px;
+}
+
+.login-footer {
+  background-color: var(--brand-red);
+  height: 80px;
+  width: 100%;
+}
+
+
+button {
+  background-color: var(--brand-red);
+  color: white;
+  border: none;
+  padding: 10px 25px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 2px;
+}
