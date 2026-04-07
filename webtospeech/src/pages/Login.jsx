@@ -8,6 +8,7 @@ function Login() {
   sessionStorage.clear();
   const navigate = useNavigate();
   const [session, setSession] = useState(null);
+  console.log(session);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -41,7 +42,7 @@ function Login() {
         </div>
 
         <p className="welcome-text">
-          Welcome to WebToSpeech! the all in one document storage and Text to Speech reader solution!
+          Welcome to WebToSpeech, the all in one document storage and Text to Speech reader solution!
         </p>
 
         <div className="auth-section">
