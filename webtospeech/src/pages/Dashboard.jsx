@@ -134,6 +134,7 @@ const [isSidebarOpen, setIsSidebarOpen] = useState(false);
               title={doc.title}
               uploadDate={doc.uploadDate}
               type={doc.fileType}
+              fileURL={doc.fileURL}
               />
             ))}
           </div>

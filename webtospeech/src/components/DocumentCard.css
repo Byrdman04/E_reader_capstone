@@ -43,6 +43,12 @@
   text-align: center;
 }
 
+.document-card-menu-placement {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+}
+
 .document-card-menu {
   position: absolute;
   top: 0.5rem;
@@ -71,6 +77,21 @@
   color: #6b7280;
   margin-top: 0.5rem;
   text-align: center;
+}
+
+.three-dot-menu-dropdown {
+  position: absolute;
+  top: 2.5rem;
+  right: 0;
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+.three-dot-menu-dropdown li {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
 }
 
 /* Mobile responsive styles */
