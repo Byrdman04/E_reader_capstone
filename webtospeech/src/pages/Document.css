@@ -167,6 +167,18 @@
   background-color: rgba(255, 255, 255, 0.1);
 }
 
+.icon-button svg,
+.bookmark-button svg {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.bookmark-button svg {
+  width: 40px;
+  height: 40px;
+}
+
 .theme-button {
   background-color: rgba(255, 255, 255, 0.2);
   border: none;
