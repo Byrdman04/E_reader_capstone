@@ -40,7 +40,7 @@ body, html {
 }
 
 .logo-circle {
-  width: 500px;
+  width: clamp(250px, 50%, 450px);
   height: auto;
   display: flex;
   align-items: center;
