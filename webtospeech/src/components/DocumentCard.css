@@ -80,6 +80,11 @@
     opacity: 1;
   }
 
+  .document-card-menu svg {
+    width: 2.25rem;
+    height: auto;
+  }
+
   .document-card-content {
     padding: 0.75rem;
   }
