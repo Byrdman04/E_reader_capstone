@@ -1,4 +1,4 @@
-import { ArrowLeft, User, Settings, LogOut } from 'lucide-react';
+import { ArrowLeft, User, LogOut } from 'lucide-react';
 import { useNavigate } from 'react-router';
 import { useEffect } from 'react';
 import { supabase } from '../supabaseClient'
@@ -77,12 +77,12 @@ export default function Profile() {
         </div>
 
         {/* Settings Icon */}
-        <button
+        {/*<button
           className="profile-settings-button"
           aria-label="Settings"
         >
           <Settings size={32} />
-        </button>
+        </button>*/}
       </header>
 
       {/* Collections Section */}
