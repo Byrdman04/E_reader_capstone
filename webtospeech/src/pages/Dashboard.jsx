@@ -17,7 +17,40 @@ export default function Dashboard() {
 
   const [books, setBooks] = useState(null);
   const [fetchError, setFetchError] = useState(null);
-  
+
+  async function loadUserInfo() {
+      const { data: { user } } = await supabase.auth.getUser();
+      return user;
+    }
+
+    useEffect(() => {
+    function displayUserData(pfpUrl) {
+      const profilePicture = document.getElementsByClassName('sidebar-user-avatar')[0];
+
+      profilePicture.innerHTML = ''; // Remove placeholder SVG
+      profilePicture.innerHTML = `<img src="${pfpUrl}" class="avatar-img" />`;
+    }
+
+    //If user data already cached, use existing info
+    if (sessionStorage.getItem("pfpUrl") && sessionStorage.getItem("username")) {
+      displayUserData(sessionStorage.getItem("pfpUrl"), sessionStorage.getItem("username"));
+      return;
+    }
+
+    //Otherwise, fetch the user data
+    loadUserInfo().then((data) => {
+      if (!data){
+        alert("No user information loaded, please log in.");
+        navigate('/');
+      }
+
+      console.log(data);
+      displayUserData(data.user_metadata.avatar_url, data.user_metadata.name);
+
+      sessionStorage.setItem("pfpUrl", data.user_metadata.avatar_url);
+      sessionStorage.setItem("username", data.user_metadata.name);
+    });
+  }, [navigate]);
 
   //Do useCallback to prevent infinite loop of useEffect and fetchBooks.
   //Also it will cache the results of the function and only re-run it when the dependencies change.

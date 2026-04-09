@@ -7,11 +7,6 @@ import './Profile.css';
 export default function Profile() {
   const navigate = useNavigate();
 
-  async function loadUserInfo() {
-    const { data: { user } } = await supabase.auth.getUser();
-    return user;
-  }
-
   useEffect(() => {
     function displayUserData(pfpUrl, userName) {
       const displayName = document.getElementsByClassName('profile-name')[0];
@@ -30,20 +25,6 @@ export default function Profile() {
       displayUserData(sessionStorage.getItem("pfpUrl"), sessionStorage.getItem("username"));
       return;
     }
-
-    //Otherwise, fetch the user data
-    loadUserInfo().then((data) => {
-      if (!data){
-        alert("No user information loaded, please log in.");
-        navigate('/');
-      }
-
-      console.log(data);
-      displayUserData(data.user_metadata.avatar_url, data.user_metadata.name);
-
-      sessionStorage.setItem("pfpUrl", data.user_metadata.avatar_url);
-      sessionStorage.setItem("username", data.user_metadata.name);
-    });
   }, [navigate]);
 
   return (
