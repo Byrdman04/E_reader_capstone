@@ -20,10 +20,7 @@ export default function Profile() {
 
       displayName.innerText = userName;
       profilePicture.innerHTML = ''; // Remove placeholder SVG
-      profilePicture.style.backgroundImage = `url(${pfpUrl})`;
-      profilePicture.style.backgroundPosition = 'center';
-      profilePicture.style.backgroundRepeat = 'no-repeat';
-      profilePicture.style.backgroundSize = 'cover';
+      profilePicture.innerHTML = `<img src="${pfpUrl}" class="avatar-img" />`;
 
       booksUploadedStat.innerText = sessionStorage.getItem("numBooksUploaded") || 0;
     }
