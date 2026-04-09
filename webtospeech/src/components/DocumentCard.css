@@ -79,6 +79,90 @@
   text-align: center;
 }
 
+.edit-document-form {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Modal box */
+.edit-document-modal {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  width: 90%;
+  max-width: 440px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Title */
+.edit-document-modal h2 {
+  font-size: 20px;
+  font-weight: 500;
+  color: #111;
+  margin: 0;
+}
+
+/* Inputs */
+.edit-document-modal input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #111;
+  outline: none;
+}
+
+.edit-document-modal input:focus {
+  border-color: #9b1c1c;
+}
+
+/* Button row */
+.edit-document-modal .button-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+/* Cancel button */
+.edit-document-modal .btn-cancel {
+  padding: 8px 18px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: white;
+  font-size: 14px;
+  cursor: pointer;
+  color: #6b7280;
+}
+
+.edit-document-modal .btn-cancel:hover {
+  background: #f3f4f6;
+}
+
+/* Save button */
+.edit-document-modal .btn-save {
+  padding: 8px 18px;
+  border: none;
+  border-radius: 8px;
+  background: #9b1c1c;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.edit-document-modal .btn-save:hover {
+  background: #7f1d1d;
+}
+
 .three-dot-menu-dropdown {
   position: absolute;
   top: 2.5rem;
