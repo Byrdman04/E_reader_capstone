@@ -1,4 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
+import { supabase } from "../supabaseClient";
 import {useState, useEffect} from 'react';
 
 //Conststant Status Strings that will be tied to the upload process.
@@ -9,7 +9,6 @@ const UploadStatus = {
     ERROR: 'error'
 };
 
-const supabase = createClient(process.env.REACT_APP_SUPABASE_URL, process.env.REACT_APP_SUPABASE_ANON_KEY);
 
 
 export default function Upload({onClose}) {

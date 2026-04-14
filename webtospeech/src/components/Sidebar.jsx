@@ -3,26 +3,57 @@ import { useNavigate } from 'react-router';
 import { useState } from 'react';
 import './Sidebar.css';
 import UploadModal from '../components/Upload';
+import { useEffect } from 'react';
+import { createClient } from "@supabase/supabase-js";
+import CreateCollection from './CreateCollection';
+
+const supabase = createClient(
+  process.env.REACT_APP_SUPABASE_URL,
+  process.env.REACT_APP_SUPABASE_ANON_KEY
+);
 
 export default function Sidebar({ onNavigate }) {
+  console.log('CreateCollection import:', CreateCollection);
   const navigate = useNavigate();
   const [selectedCollection, setSelectedCollection] = useState(null);
   const [showUpload, setShowUpload] = useState(false);
 
   
-  // Mock collections data
-  const collections = [
-    { id: 1, name: 'Collection 1' },
-    { id: 2, name: 'Collection 2' },
-    { id: 3, name: 'Collection 3' },
-  ];
+  //Collections Bar
+  const [collections, setCollections] = useState([]);
+  const [showCreate, setShowCreate] = useState(false);
 
+  useEffect(() => {
+  async function fetchCollections() {
+    const { data, error } = await supabase
+      .from('collections')
+      .select('id, name')
+      .order('id');
+
+    if (!error && data) {
+      setCollections(data);
+    }
+  }
+
+  fetchCollections();
+}, []);
+
+  function handleNewCollection(newCol) {
+    setCollections(prev => [...prev, newCol]);
+  }
+
+
+
+  
   const handleNavigation = (path) => {
     navigate(path);
     if (onNavigate) {
       onNavigate();
     }
   };
+
+  
+
 
   return (
     <>
@@ -39,7 +70,7 @@ export default function Sidebar({ onNavigate }) {
       </button>
 
       {/* Add Folder Button */}
-      <button className="sidebar-button">
+      <button className="sidebar-button" onClick={() => setShowCreate(true)}>
         <FolderPlus />
       </button>
 
@@ -77,6 +108,13 @@ export default function Sidebar({ onNavigate }) {
     {showUpload && (
       <UploadModal onClose={() => setShowUpload(false)}/>
     )}
+
+    {showCreate && (
+      <CreateCollection
+        onClose={() => setShowCreate(false)}
+        onCreate={handleNewCollection}
+  />
+)}
     </>
   );
 }
