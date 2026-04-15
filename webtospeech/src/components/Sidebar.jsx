@@ -1,50 +1,37 @@
 import { User, FolderPlus, Upload } from 'lucide-react';
 import { useNavigate } from 'react-router';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './Sidebar.css';
 import UploadModal from '../components/Upload';
-import { useEffect } from 'react';
-import { createClient } from "@supabase/supabase-js";
+import { supabase } from "../supabaseClient";
 import CreateCollection from './CreateCollection';
 
-const supabase = createClient(
-  process.env.REACT_APP_SUPABASE_URL,
-  process.env.REACT_APP_SUPABASE_ANON_KEY
-);
-
-export default function Sidebar({ onNavigate }) {
-  console.log('CreateCollection import:', CreateCollection);
+export default function Sidebar({ onNavigate, selectedCollection, setSelectedCollection }) {
   const navigate = useNavigate();
-  const [selectedCollection, setSelectedCollection] = useState(null);
   const [showUpload, setShowUpload] = useState(false);
 
-  
-  //Collections Bar
   const [collections, setCollections] = useState([]);
   const [showCreate, setShowCreate] = useState(false);
 
   useEffect(() => {
-  async function fetchCollections() {
-    const { data, error } = await supabase
-      .from('collections')
-      .select('id, name')
-      .order('id');
+    async function fetchCollections() {
+      const { data, error } = await supabase
+        .from('collections')
+        .select('id, name')
+        .order('id');
 
-    if (!error && data) {
-      setCollections(data);
+      if (!error && data) {
+        setCollections(data);
+      }
     }
-  }
 
-  fetchCollections();
-}, []);
+    fetchCollections();
+  }, []);
 
   function handleNewCollection(newCol) {
     setCollections(prev => [...prev, newCol]);
   }
 
-
-
-  
   const handleNavigation = (path) => {
     navigate(path);
     if (onNavigate) {
@@ -52,69 +39,67 @@ export default function Sidebar({ onNavigate }) {
     }
   };
 
-  
-
-
   return (
     <>
-    <aside className="sidebar">
-      {/* User Profile */}
-      <button 
-        className="sidebar-user-profile"
-        onClick={() => handleNavigation('/profile')}
-        aria-label="Go to profile"
-      >
-        <div className="sidebar-user-avatar">
-          <User />
+      <aside className="sidebar">
+        <button
+          className="sidebar-user-profile"
+          onClick={() => handleNavigation('/profile')}
+          aria-label="Go to profile"
+        >
+          <div className="sidebar-user-avatar">
+            <User />
+          </div>
+        </button>
+
+        <button className="sidebar-button" onClick={() => setShowCreate(true)}>
+          <FolderPlus />
+        </button>
+
+        <div className="sidebar-collections">
+          <h3>Collections</h3>
+          <ul className="sidebar-collections-list">
+            {collections.map((collection) => (
+              <li key={collection.id}>
+                <button
+                  className={`sidebar-collection-item ${selectedCollection === collection.id ? 'active' : ''}`}
+                  onClick={() => {
+                    if (selectedCollection === collection.id) {
+                      setSelectedCollection(null);
+                    } else {
+                      setSelectedCollection(collection.id);
+                    }
+                  }}
+                >
+                  {collection.name}
+                </button>
+              </li>
+            ))}
+          </ul>
         </div>
-      </button>
 
-      {/* Add Folder Button */}
-      <button className="sidebar-button" onClick={() => setShowCreate(true)}>
-        <FolderPlus />
-      </button>
+        <div className="sidebar-search">
+          <input
+            type="text"
+            placeholder="Search..."
+          />
+        </div>
 
-      {/* Collections */}
-      <div className="sidebar-collections">
-        <h3>Collections</h3>
-        <ul className="sidebar-collections-list">
-          {collections.map((collection) => (
-            <li key={collection.id}>
-              <button
-                className={`sidebar-collection-item ${selectedCollection === collection.id ? 'active' : ''}`}
-                onClick={() => setSelectedCollection(collection.id)}
-              >
-                {collection.name}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
+        <button className="sidebar-upload" onClick={() => setShowUpload(true)}>
+          <Upload />
+        </button>
+      </aside>
 
-      {/* Search Input */}
-      <div className="sidebar-search">
-        <input
-          type="text"
-          placeholder="Search..."
+      {showUpload && (
+        <UploadModal onClose={() => setShowUpload(false)} />
+      )}
+
+      {showCreate && (
+        <CreateCollection
+          onClose={() => setShowCreate(false)}
+          onCreate={handleNewCollection}
         />
-      </div>
-
-      {/* Upload Button */}
-      <button className="sidebar-upload" onClick={() => setShowUpload(true)}>
-        <Upload />
-      </button>
-    </aside>
-
-    {showUpload && (
-      <UploadModal onClose={() => setShowUpload(false)}/>
-    )}
-
-    {showCreate && (
-      <CreateCollection
-        onClose={() => setShowCreate(false)}
-        onCreate={handleNewCollection}
-  />
-)}
+      )}
     </>
   );
 }

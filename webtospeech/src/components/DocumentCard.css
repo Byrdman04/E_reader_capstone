@@ -11,7 +11,8 @@
 }
 
 .document-card:hover {
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+              0 4px 6px -4px rgba(0, 0, 0, 0.1);
 }
 
 .document-card-content {
@@ -79,6 +80,10 @@
   text-align: center;
 }
 
+/* ===========================
+   EDIT MODAL
+=========================== */
+
 .edit-document-form {
   position: fixed;
   inset: 0;
@@ -89,7 +94,6 @@
   justify-content: center;
 }
 
-/* Modal box */
 .edit-document-modal {
   background: white;
   border-radius: 12px;
@@ -101,7 +105,6 @@
   gap: 16px;
 }
 
-/* Title */
 .edit-document-modal h2 {
   font-size: 20px;
   font-weight: 500;
@@ -109,7 +112,6 @@
   margin: 0;
 }
 
-/* Inputs */
 .edit-document-modal input {
   width: 100%;
   padding: 10px 14px;
@@ -124,7 +126,6 @@
   border-color: #9b1c1c;
 }
 
-/* Button row */
 .edit-document-modal .button-row {
   display: flex;
   justify-content: flex-end;
@@ -132,7 +133,6 @@
   margin-top: 4px;
 }
 
-/* Cancel button */
 .edit-document-modal .btn-cancel {
   padding: 8px 18px;
   border: 1px solid #e5e7eb;
@@ -147,7 +147,6 @@
   background: #f3f4f6;
 }
 
-/* Save button */
 .edit-document-modal .btn-save {
   padding: 8px 18px;
   border: none;
@@ -163,24 +162,87 @@
   background: #7f1d1d;
 }
 
+/* ===========================
+   DROPDOWN MENU (FIXED SPACING)
+=========================== */
+
 .three-dot-menu-dropdown {
   position: absolute;
   top: 2.5rem;
   right: 0;
   background-color: white;
-  border-radius: 4px;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
-  z-index: 10;
+  border-radius: 6px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+              0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+  padding: 6px;
+  margin: 0;
+  list-style: none;
+
+  display: flex;
+  flex-direction: column;
+  gap: 6px; /* ✅ THIS fixes spacing between items */
 }
 
+/* reset li spacing */
 .three-dot-menu-dropdown li {
-  padding: 0.5rem 1rem;
-  cursor: pointer;
+  padding: 0;
+  margin: 0;
 }
 
-/* Mobile responsive styles */
+/* full-width clickable buttons */
+.dropdown-item {
+  width: 100%;
+  text-align: left;
+  padding: 0.75rem 1rem; /* increased for better spacing */
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: block;
+  font-size: 0.9rem;
+  color: #111;
+  border-radius: 6px; /* smoother hover feel */
+}
+
+.dropdown-item:hover {
+  background: #f3f4f6;
+}
+
+/* submenu container isolation */
+.collections-submenu {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  margin-top: 4px;
+}
+
+/* each collection item fully clickable */
+.dropdown-subitem {
+  width: 100%;
+  text-align: left;
+  padding: 0.75rem 1rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #111;
+  user-select: none;
+  border-radius: 6px;
+}
+
+.dropdown-subitem:hover {
+  background: #f3f4f6;
+}
+
+/* prevent "whole menu selection" feeling */
+.three-dot-menu-dropdown,
+.three-dot-menu-dropdown * {
+  user-select: none;
+}
+
+/* mobile */
+
 @media (max-width: 768px) {
-  /* Always show menu button on mobile (no hover needed) */
   .document-card-menu {
     opacity: 1;
   }
