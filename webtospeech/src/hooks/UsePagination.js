@@ -1,7 +1,7 @@
 // hooks/usePagination.js
 import { useState, useMemo } from 'react';
 
-const LINES_PER_PAGE = 20; // tune this to your preference
+const LINES_PER_PAGE = 30; // tune this to your preference
 
 export function usePagination(content) {
   const [currentPage, setCurrentPage] = useState(0);
@@ -17,8 +17,8 @@ export function usePagination(content) {
     return result;
   }, [content]);
 
-  const goToNext = () => setCurrentPage((p) => Math.min(p + 1, pages.length - 1));
-  const goToPrev = () => setCurrentPage((p) => Math.max(p - 1, 0));
+  const goToNext = () => setCurrentPage((p) => Math.min(p + 1, pages.length - 1), document.getElementsByClassName("main-content")[0].scrollTop = 0);
+  const goToPrev = () => setCurrentPage((p) => Math.max(p - 1, 0), document.getElementsByClassName("main-content")[0].scrollTop = 0);
   const goToPage = (n) => setCurrentPage(n);
 
   return {
