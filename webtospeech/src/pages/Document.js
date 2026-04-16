@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, Pause, Play, Volume2, Bookmark, Type, Palette, X } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Pause, Play, Volume2, Bookmark, Type, Palette, X } from 'lucide-react';
 import { createClient } from "@supabase/supabase-js";
 import { useSpeech } from '../hooks/UseSpeech';
+import { usePagination} from '../hooks/UsePagination';
 import SpeechHighlight from '../components/SpeechHighlight';
 import './Document.css';
 
@@ -24,6 +25,9 @@ function Document() {
   const [fontSize, setFontSize] = useState(16);
   const [theme, setTheme] = useState('sepia');
 
+  // Pagination
+  const { currentPage, totalPages, pageContent, goToNext, goToPrev } = usePagination(content);
+
   // Speech — hook takes over all TTS concerns
   const {
     isPlaying,
@@ -33,7 +37,7 @@ function Document() {
     handlePlayPause,
     handleSpeedChange,
     handleVolumeChange,
-  } = useSpeech(content);
+  } = useSpeech(pageContent);
 
   const themes = {
     sepia: { bg: '#f5f1e8', text: '#2c2416' },
@@ -97,12 +101,23 @@ function Document() {
       <main className="main-content">
         <div className="document-container">
           <SpeechHighlight
-            content={content}
+            content={pageContent}
             highlightIndex={highlightIndex}
             fontSize={fontSize}
           />
         </div>
       </main>
+
+      {/* Pagination Controls */}
+        <div className="pagination-controls">
+          <button className="page-button" onClick={goToPrev} disabled={currentPage === 0}>
+            <ArrowLeft size={24} strokeWidth={3} />
+          </button>
+            <span className="page-indicator">{currentPage + 1} / {totalPages}</span>
+              <button className="page-button" onClick={goToNext} disabled={currentPage === totalPages - 1}>
+                <ArrowRight size={24} strokeWidth={3} />
+              </button>
+        </div>
 
       {/* Controls Bar */}
       <footer className="controls-bar">
