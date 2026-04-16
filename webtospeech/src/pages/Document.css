@@ -262,7 +262,7 @@
   background-color: var(--white-faint);
 }
 
-.icon-button svg {
+.icon-button svg, .page-button svg {
   width: 24px;
   height: 24px;
   flex-shrink: 0;
