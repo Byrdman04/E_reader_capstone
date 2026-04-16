@@ -18,6 +18,7 @@ export default function Dashboard() {
   const [fetchError, setFetchError] = useState(null);
   const [activeCollection, setActiveCollection] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  console.log(fetchError);
 
   async function loadUserInfo() {
     const { data: { user } } = await supabase.auth.getUser();
@@ -105,7 +106,7 @@ export default function Dashboard() {
     }
 
     setBooks(data || []);
-  }, [navigate, activeCollection]);
+  }, [activeCollection]);
 
   const handleSearch = (str) => {
     fetchBooks(str);
@@ -113,7 +114,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     fetchBooks();
-  }, [activeCollection]);
+  }, [activeCollection, fetchBooks]);
 
   const myCollection = useMemo(() => {
     const col = new Collection();
