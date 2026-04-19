@@ -1,11 +1,13 @@
-import { ArrowLeft, User, LogOut } from 'lucide-react';
+import { ArrowLeft, User, LogOut, Pencil, Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { supabase } from '../supabaseClient'
 import './Profile.css';
 
 export default function Profile() {
   const navigate = useNavigate();
+
+  const [collections, setCollections] = useState([]);
 
   useEffect(() => {
     function displayUserData(pfpUrl, userName) {
@@ -20,9 +22,17 @@ export default function Profile() {
       booksUploadedStat.innerText = sessionStorage.getItem("numBooksUploaded") || 0;
     }
 
+    const storedCollections = sessionStorage.getItem('collections');
+    if (storedCollections) {
+      setCollections(JSON.parse(storedCollections));
+    }
+
     //If user data already cached, use existing info
     if (sessionStorage.getItem("pfpUrl") && sessionStorage.getItem("username")) {
-      displayUserData(sessionStorage.getItem("pfpUrl"), sessionStorage.getItem("username"));
+      displayUserData(
+        sessionStorage.getItem("pfpUrl"),
+        sessionStorage.getItem("username")
+      );
       return;
     }
   }, [navigate]);
@@ -56,30 +66,45 @@ export default function Profile() {
             <p className="profile-stats-number">&#8203;</p>
           </div>
         </div>
-
-        {/* Settings Icon */}
-        {/*<button
-          className="profile-settings-button"
-          aria-label="Settings"
-        >
-          <Settings size={32} />
-        </button>*/}
       </header>
 
       {/* Collections Section */}
       <section className="profile-collections">
         <h3 className="profile-collections-title">Collections</h3>
+
         <ul className="profile-collections-list">
-          <li className="profile-collection-item">Collection 1</li>
-          <li className="profile-collection-item">Collection 2</li>
-          <li className="profile-collection-item">Collection 3</li>
+          {collections.length === 0 ? (
+            <li className="profile-collection-item">No collections yet</li>
+          ) : (
+            collections.map((collection) => (
+              <li
+                key={collection.id}
+                className="profile-collection-item"
+              >
+                <span>{collection.name}</span>
+
+                <div className="collection-actions">
+                  <Pencil
+                    size={18}
+                    className="collection-icon edit-icon"
+                    onClick={() => console.log("Edit", collection.id)}
+                  />
+                  <Trash2
+                    size={18}
+                    className="collection-icon delete-icon"
+                    onClick={() => console.log("Delete", collection.id)}
+                  />
+                </div>
+              </li>
+            ))
+          )}
         </ul>
 
         {/* Logout Button */}
         <button
           className="profile-logout-button"
           onClick={async () => {
-            supabase.auth.signOut();
+            await supabase.auth.signOut();
             navigate("/");
           }}
         >

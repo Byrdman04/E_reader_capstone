@@ -7,7 +7,7 @@ import DocumentCard from '../components/DocumentCard';
 import './Dashboard.css';
 import Book from '../components/BookDir/Book';
 import Collection from '../components/BookDir/Collection';
-import { createClient } from "@supabase/supabase-js"; 
+import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(process.env.REACT_APP_SUPABASE_URL, process.env.REACT_APP_SUPABASE_ANON_KEY);
 
@@ -97,6 +97,10 @@ export default function Dashboard() {
       const res = await query;
       data = res.data;
       error = res.error;
+
+      if (!sessionStorage.getItem('numBooksUploaded')) {
+        sessionStorage.setItem('numBooksUploaded', data.length);
+      }
     }
 
     if (error) {
@@ -136,7 +140,7 @@ export default function Dashboard() {
 
   return (
     <div className="dashboard-container">
-      <button 
+      <button
         className="dashboard-mobile-menu-btn"
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         aria-label="Toggle menu"
@@ -145,7 +149,7 @@ export default function Dashboard() {
       </button>
 
       {isSidebarOpen && (
-        <div 
+        <div
           className="dashboard-sidebar-overlay"
           onClick={() => setIsSidebarOpen(false)}
         />
@@ -162,12 +166,12 @@ export default function Dashboard() {
       </div>
 
       <div className="dashboard-main-content">
-        <DashboardHeader outputSearch={handleSearch}/>
+        <DashboardHeader outputSearch={handleSearch} />
 
         <main className="dashboard-grid-container">
           <div className="dashboard-documents-grid">
             {myCollection.getCollection().map((doc) => (
-              <DocumentCard 
+              <DocumentCard
                 key={doc.id}
                 id={doc.id}
                 title={doc.title}

@@ -22,6 +22,7 @@ export default function Sidebar({ onNavigate, selectedCollection, setSelectedCol
 
       if (!error && data) {
         setCollections(data);
+        sessionStorage.setItem('collections', JSON.stringify(data));
       }
     }
 
@@ -29,7 +30,11 @@ export default function Sidebar({ onNavigate, selectedCollection, setSelectedCol
   }, []);
 
   function handleNewCollection(newCol) {
-    setCollections(prev => [...prev, newCol]);
+    setCollections(prev => {
+      const updated = [...prev, newCol];
+      sessionStorage.setItem('collections', JSON.stringify(updated));
+      return updated;
+    });
   }
 
   const handleNavigation = (path) => {
