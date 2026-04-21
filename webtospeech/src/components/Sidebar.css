@@ -223,3 +223,16 @@
   justify-content: flex-end;
   gap: 8px;
 }
+
+.genre-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  max-height: 120px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.genre-tag {
+  flex: 0 0 auto;
+}
