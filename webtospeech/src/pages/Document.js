@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, Pause, Play, Volume2, Bookmark, Type, Palette, X } from 'lucide-react';
 import { createClient } from "@supabase/supabase-js";
@@ -17,6 +17,7 @@ function Document() {
   console.log(title);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const mainContentRef = useRef(null);
 
   // UI state
   const [isBookmarked, setIsBookmarked] = useState(false);
@@ -26,7 +27,7 @@ function Document() {
   const [theme, setTheme] = useState('sepia');
 
   // Pagination
-  const { currentPage, totalPages, pageContent, goToNext, goToPrev } = usePagination(content);
+  const { currentPage, totalPages, pageContent, goToNext, goToPrev } = usePagination(content, mainContentRef);
 
   // Speech — hook takes over all TTS concerns
   const {
@@ -82,6 +83,17 @@ function Document() {
     loadDocument();
   }, [id]);
 
+  // Left & Right Arrow Page Handling
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'ArrowRight') goToNext();
+      if (e.key === 'ArrowLeft')  goToPrev();
+  };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [goToNext, goToPrev]);
+
   if (loading) return <div className="loading">Loading document...</div>;
   if (error)   return <div className="error">{error}</div>;
 
@@ -98,7 +110,7 @@ function Document() {
       </header>
 
       {/* Document Content */}
-      <main className="main-content">
+      <main className="main-content" ref={mainContentRef}>
         <div className="document-container">
           <SpeechHighlight
             content={pageContent}
