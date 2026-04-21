@@ -144,16 +144,19 @@ async function handleFileUpload(){
                     {/* Genre toggle buttons instead of a text field */}
                     <div className="genre-picker">
                         <p>Genres:</p>
-                        {allGenres.map(g => (
-                            <button
-                                key={g.id}
-                                type="button"
-                                className={selectedGenreIds.includes(g.id) ? 'genre-tag active' : 'genre-tag'}
-                                onClick={() => toggleGenre(g.id)}
-                            >
-                                {g.name}
-                            </button>
-                        ))}
+
+                        <div className="genre-list">
+                            {allGenres.map(g => (
+                                <button
+                                    key={g.id}
+                                    type="button"
+                                    className={selectedGenreIds.includes(g.id) ? 'genre-tag active' : 'genre-tag'}
+                                    onClick={() => toggleGenre(g.id)}
+                                >
+                                    {g.name}
+                                </button>
+                            ))}
+                        </div>
                     </div>
 
                     <input
