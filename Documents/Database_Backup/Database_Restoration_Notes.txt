@@ -1,0 +1,25 @@
+The Schema File will Recreate:
+    - Tables
+    - Functions
+    - Triggers
+    - Indexes
+    - More but unrelated to project scope
+
+The Roles File will Recreate:
+    - RLS (Row Level Security) Policies
+
+What is not Recreated: 
+    - Storage Buckets
+    - Storage Files/Objects
+    - Edge Functions
+    - oAuth 
+Note: All that is not recreated will need to be manually 
+    remade. 
+
+This app used:
+    - Google oAuth
+    - 2 buckets (Community-books & User-books)
+        * Community-books: public that all users have access to read only.
+        * User-books: Creates a directory for each user where they can upload,
+            read, and write their own books. 
+        Mime typs for both buckes should only allow text files for uploading. 
