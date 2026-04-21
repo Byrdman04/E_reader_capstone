@@ -1,4 +1,4 @@
-import { Search, Filter } from 'lucide-react';
+import { Search } from 'lucide-react';
 import './DashboardHeader.css';
 import { useState } from 'react'; 
 
@@ -51,9 +51,9 @@ function handleInputChange(e){
         </div>
 
         {/* Filter Button */}
-        <button className="dashboard-header-filter-button">
+        {/*<button className="dashboard-header-filter-button">
           <Filter />
-        </button>
+        </button>*/}
       </div>
     </header>
   );
