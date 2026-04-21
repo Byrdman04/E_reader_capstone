@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, Pause, Play, Volume2, Bookmark, Type, Palette, X } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Pause, Play, Volume2, Type, Palette, X } from 'lucide-react';
 import { createClient } from "@supabase/supabase-js";
 import { useSpeech } from '../hooks/UseSpeech';
 import { usePagination} from '../hooks/UsePagination';
@@ -20,7 +20,7 @@ function Document() {
   const mainContentRef = useRef(null);
 
   // UI state
-  const [isBookmarked, setIsBookmarked] = useState(false);
+  //const [isBookmarked, setIsBookmarked] = useState(false);
   const [showFontDialog, setShowFontDialog] = useState(false);
   const [showThemeDialog, setShowThemeDialog] = useState(false);
   const [fontSize, setFontSize] = useState(16);
@@ -174,9 +174,9 @@ function Document() {
             <button onClick={() => setShowFontDialog(true)} className="icon-button" aria-label="Font settings">
               <Type size={24} />
             </button>
-            <button onClick={() => setIsBookmarked(!isBookmarked)} className="bookmark-button" aria-label={isBookmarked ? 'Remove bookmark' : 'Add bookmark'}>
+            {/*<button onClick={() => setIsBookmarked(!isBookmarked)} className="bookmark-button" aria-label={isBookmarked ? 'Remove bookmark' : 'Add bookmark'}>
               <Bookmark size={40} fill={isBookmarked ? 'white' : 'none'} strokeWidth={2} />
-            </button>
+            </button>*/}
           </div>
         </div>
       </footer>
