@@ -59,10 +59,13 @@ export default function Dashboard() {
     let error = null;
 
     if (activeCollection) {
+      console.log("ACTIVE COLLECTION:", activeCollection, typeof activeCollection);
       const { data: links, error: linkError } = await supabase
         .from('memberOfCollection')
         .select('book_id')
-        .eq('collection_id', activeCollection);
+        .eq('collection_id', Number(activeCollection))
+        console.log("LINKS:", links);
+        console.log("LINK ERROR:", linkError);
 
       if (linkError) {
         setFetchError("Could not fetch collection links");
@@ -72,6 +75,7 @@ export default function Dashboard() {
       const bookIds = links.map(l => l.book_id);
 
       if (bookIds.length === 0) {
+        setFetchError(null); // add this
         setBooks([]);
         return;
       }
