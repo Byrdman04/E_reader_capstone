@@ -4,7 +4,11 @@ import { useEffect, useState, useRef } from 'react';
 import './DocumentCard.css';
 import { supabase } from "../supabaseClient";
 
-export default function DocumentCard({ id, title, uploadDate, type, fileURL }) {
+export default function DocumentCard({ id, title, uploadDate, type, fileURL, onRemoveFromCollection }) {
+
+  console.log("REMOVE PROP:", onRemoveFromCollection);
+
+
   const navigate = useNavigate();
   const [showEdit, setShowEdit] = useState(false);
 
@@ -29,7 +33,14 @@ export default function DocumentCard({ id, title, uploadDate, type, fileURL }) {
         items={[
           { label: 'Edit', onClick: () => setShowEdit(true) },
           { label: 'Add to Collection', type: 'collections' },
+          ...(onRemoveFromCollection ? [
+              {
+                label: 'Remove from Collection',
+                onClick: () => onRemoveFromCollection(id)
+              }
+            ] : []),
           { label: 'Delete', onClick: () => deleteDocument(id, fileURL) }
+          
         ]}
       />
 
@@ -144,7 +155,9 @@ function ThreeDotMenu({ items, bookId }) {
                   onClick={(e) => {
                     e.stopPropagation();
                     setOpen(false);
-                    item.onClick();
+                    if (typeof item.onClick === "function") {
+                      item.onClick();
+                    }
                   }}
                 >
                   {item.label}

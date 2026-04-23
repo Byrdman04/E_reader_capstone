@@ -37,6 +37,56 @@ export default function Profile() {
     }
   }, [navigate]);
 
+    const handleDelete = async (collectionId) => {
+      const confirmDelete = window.confirm("Delete this collection?");
+      if (!confirmDelete) return;
+
+      // 1. delete child rows
+      await supabase
+        .from('memberOfCollection')
+        .delete()
+        .eq('collection_id', collectionId);
+
+      // 2. delete collection
+      const { error } = await supabase
+        .from('collections')
+        .delete()
+        .eq('id', collectionId);
+
+        
+
+      if (!error) {
+        setCollections(prev =>
+          prev.filter(c => c.id !== collectionId)
+        );
+      }
+    };
+
+    const handleEdit = async (collectionId, currentName) => {
+      const newName = prompt("Rename collection:", currentName);
+
+      if (!newName || newName.trim() === "") return;
+
+      const { error } = await supabase
+        .from('collections')
+        .update({ name: newName.trim() })
+        .eq('id', collectionId);
+
+      if (error) {
+        console.error("Failed to update collection:", error.message);
+        return;
+      }
+
+      // update UI
+      setCollections(prev =>
+        prev.map(c =>
+          c.id === collectionId
+            ? { ...c, name: newName }
+            : c
+        )
+      );
+    };
+
   return (
     <div className="profile-container">
       {/* Header Section */}
@@ -87,12 +137,12 @@ export default function Profile() {
                   <Pencil
                     size={18}
                     className="collection-icon edit-icon"
-                    onClick={() => console.log("Edit", collection.id)}
+                    onClick={() => handleEdit(collection.id, collection.name)}
                   />
                   <Trash2
                     size={18}
                     className="collection-icon delete-icon"
-                    onClick={() => console.log("Delete", collection.id)}
+                    onClick={() => handleDelete(collection.id)}
                   />
                 </div>
               </li>
