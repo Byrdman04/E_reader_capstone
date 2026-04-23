@@ -1,9 +1,9 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, Pause, Play, Volume2, Type, Palette, X } from 'lucide-react';
 import { createClient } from "@supabase/supabase-js";
 import { useSpeech } from '../hooks/UseSpeech';
-import { usePagination} from '../hooks/UsePagination';
+import { usePagination } from '../hooks/UsePagination';
 import SpeechHighlight from '../components/SpeechHighlight';
 import './Document.css';
 
@@ -14,7 +14,7 @@ function Document() {
   const navigate = useNavigate();
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
-  console.log(title);
+  void title;
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const mainContentRef = useRef(null);
@@ -29,6 +29,12 @@ function Document() {
   // Pagination
   const { currentPage, totalPages, pageContent, goToNext, goToPrev } = usePagination(content, mainContentRef);
 
+  const handlePageEnd = useCallback(() => {
+    if (currentPage < totalPages - 1) {
+      goToNext();
+    }
+  }, [currentPage, totalPages, goToNext]);
+
   // Speech — hook takes over all TTS concerns
   const {
     isPlaying,
@@ -38,12 +44,12 @@ function Document() {
     handlePlayPause,
     handleSpeedChange,
     handleVolumeChange,
-  } = useSpeech(pageContent);
+  } = useSpeech(pageContent, handlePageEnd);
 
   const themes = {
     sepia: { bg: '#f5f1e8', text: '#2c2416' },
     white: { bg: '#ffffff', text: '#000000' },
-    dark:  { bg: '#1a1a1a', text: '#e0e0e0' },
+    dark: { bg: '#1a1a1a', text: '#e0e0e0' },
   };
 
   useEffect(() => {
@@ -64,7 +70,7 @@ function Document() {
         }
 
         setTitle(data.title);
-        
+
         //fetch the file from the bucket using the URL 
         const { data: fileData, error: fileError } = await supabase.storage
           .from('user-books')
@@ -87,19 +93,19 @@ function Document() {
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'ArrowRight') goToNext();
-      if (e.key === 'ArrowLeft')  goToPrev();
+      if (e.key === 'ArrowLeft') goToPrev();
       if (e.key === ' ') {
         e.preventDefault(); // stops default page scrolling on spacebar
         handlePlayPause();
       }
-  };
+    };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [goToNext, goToPrev, handlePlayPause]);
 
   if (loading) return <div className="loading">Loading document...</div>;
-  if (error)   return <div className="error">{error}</div>;
+  if (error) return <div className="error">{error}</div>;
 
   const currentTheme = themes[theme];
 
@@ -125,15 +131,15 @@ function Document() {
       </main>
 
       {/* Pagination Controls */}
-        <div className="pagination-controls">
-          <button className="page-button" onClick={goToPrev} disabled={currentPage === 0}>
-            <ArrowLeft size={24} strokeWidth={3} />
-          </button>
-            <span className="page-indicator">{currentPage + 1} / {totalPages}</span>
-              <button className="page-button" onClick={goToNext} disabled={currentPage === totalPages - 1}>
-                <ArrowRight size={24} strokeWidth={3} />
-              </button>
-        </div>
+      <div className="pagination-controls">
+        <button className="page-button" onClick={goToPrev} disabled={currentPage === 0}>
+          <ArrowLeft size={24} strokeWidth={3} />
+        </button>
+        <span className="page-indicator">{currentPage + 1} / {totalPages}</span>
+        <button className="page-button" onClick={goToNext} disabled={currentPage === totalPages - 1}>
+          <ArrowRight size={24} strokeWidth={3} />
+        </button>
+      </div>
 
       {/* Controls Bar */}
       <footer className="controls-bar">
@@ -141,7 +147,7 @@ function Document() {
           <button onClick={handlePlayPause} className="play-button" aria-label={isPlaying ? 'Pause' : 'Play'}>
             {isPlaying
               ? <Pause size={40} fill="white" strokeWidth={0} />
-              : <Play  size={40} fill="white" strokeWidth={0} />
+              : <Play size={40} fill="white" strokeWidth={0} />
             }
           </button>
 

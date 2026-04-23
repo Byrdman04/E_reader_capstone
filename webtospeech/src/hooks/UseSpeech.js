@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 
-export function useSpeech(content) {
+export function useSpeech(content, onEnd) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [speed, setSpeed] = useState(1);
   const [volume, setVolume] = useState(75);
@@ -8,20 +8,16 @@ export function useSpeech(content) {
 
   const synthRef = useRef(window.speechSynthesis);
   const utteranceRef = useRef(null);
-  const charOffsetRef = useRef(0); // tracks position for restarts
+  const wasPlayingRef = useRef(false);
+  const charOffsetRef = useRef(0);
+
+  const speedRef = useRef(speed);
+  const volumeRef = useRef(volume);
 
   useEffect(() => {
-  const synth = synthRef.current; // capture ref value
-  return () => synth.cancel();
+    const synth = synthRef.current;
+    return () => synth.cancel();
   }, []);
-
-  // Cancel and reset highlight when page content changes
-  useEffect(() => {
-    synthRef.current.cancel();
-    setIsPlaying(false);
-    setHighlightIndex({ start: -1, length: 0 });
-    charOffsetRef.current = 0;
-  }, [content]);
 
   const startUtterance = useCallback((offset = 0) => {
     const synth = synthRef.current;
@@ -31,13 +27,17 @@ export function useSpeech(content) {
     if (!textToSpeak.trim()) return;
 
     const utterance = new SpeechSynthesisUtterance(textToSpeak);
-    utterance.rate = speed;
-    utterance.volume = volume / 100;
+
+    utterance.rate = speedRef.current;
+    utterance.volume = volumeRef.current / 100;
 
     utterance.onboundary = (event) => {
       if (event.name === 'word') {
         charOffsetRef.current = offset + event.charIndex;
-        setHighlightIndex({ start: offset + event.charIndex, length: event.charLength });
+        setHighlightIndex({
+          start: offset + event.charIndex,
+          length: event.charLength,
+        });
       }
     };
 
@@ -45,11 +45,30 @@ export function useSpeech(content) {
       setIsPlaying(false);
       setHighlightIndex({ start: -1, length: 0 });
       charOffsetRef.current = 0;
+
+      onEnd?.();
     };
 
     utteranceRef.current = utterance;
     synth.speak(utterance);
-  }, [content, speed, volume]);
+  }, [content, onEnd]);
+
+  // Cancel and reset highlight when page content changes
+  useEffect(() => {
+    const synth = synthRef.current;
+
+    synth.cancel();
+    utteranceRef.current = null;
+    setHighlightIndex({ start: -1, length: 0 });
+    charOffsetRef.current = 0;
+
+    if (wasPlayingRef.current) {
+      startUtterance(0);
+      setIsPlaying(true);
+    } else {
+      setIsPlaying(false);
+    }
+  }, [content, startUtterance]);
 
   const handlePlayPause = useCallback(() => {
     const synth = synthRef.current;
@@ -57,29 +76,30 @@ export function useSpeech(content) {
     if (isPlaying) {
       synth.pause();
       setIsPlaying(false);
+      wasPlayingRef.current = false;
       return;
     }
 
-    if (synth.paused) {
-      synth.resume();
-      setIsPlaying(true);
-      return;
-    }
-
-    startUtterance(0);
+    startUtterance(charOffsetRef.current);
     setIsPlaying(true);
+    wasPlayingRef.current = true;
   }, [isPlaying, startUtterance]);
 
   const handleSpeedChange = (newSpeed) => {
     setSpeed(newSpeed);
+
+    speedRef.current = newSpeed;
+
     if (isPlaying) {
-      // Restart from current word position with new speed
       startUtterance(charOffsetRef.current);
     }
   };
 
   const handleVolumeChange = (newVolume) => {
     setVolume(newVolume);
+
+    volumeRef.current = newVolume;
+
     if (isPlaying) {
       startUtterance(charOffsetRef.current);
     }
