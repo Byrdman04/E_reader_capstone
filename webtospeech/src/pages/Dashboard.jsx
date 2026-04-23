@@ -7,7 +7,7 @@ import DocumentCard from '../components/DocumentCard';
 import './Dashboard.css';
 import Book from '../components/BookDir/Book';
 import Collection from '../components/BookDir/Collection';
-import { createClient } from "@supabase/supabase-js"; 
+import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(process.env.REACT_APP_SUPABASE_URL, process.env.REACT_APP_SUPABASE_ANON_KEY);
 
@@ -16,6 +16,7 @@ export default function Dashboard() {
 
   const [books, setBooks] = useState(null);
   const [fetchError, setFetchError] = useState(null);
+  void fetchError; //does nothing, uses fetchError to ignore usage warning.
   const [activeCollection, setActiveCollection] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -64,8 +65,8 @@ export default function Dashboard() {
         .from('memberOfCollection')
         .select('book_id')
         .eq('collection_id', Number(activeCollection))
-        console.log("LINKS:", links);
-        console.log("LINK ERROR:", linkError);
+      console.log("LINKS:", links);
+      console.log("LINK ERROR:", linkError);
 
       if (linkError) {
         setFetchError("Could not fetch collection links");
@@ -75,7 +76,7 @@ export default function Dashboard() {
       const bookIds = links.map(l => l.book_id);
 
       if (bookIds.length === 0) {
-        setFetchError(null); 
+        setFetchError(null);
         setBooks([]);
         return;
       }
@@ -100,6 +101,10 @@ export default function Dashboard() {
       const res = await query;
       data = res.data;
       error = res.error;
+
+      if (!sessionStorage.getItem('numBooksUploaded')) {
+        sessionStorage.setItem('numBooksUploaded', data.length);
+      }
     }
 
     if (error) {
@@ -109,7 +114,7 @@ export default function Dashboard() {
     }
 
     setBooks(data || []);
-  }, [navigate, activeCollection]);
+  }, [activeCollection]);
 
   const handleSearch = (str) => {
     fetchBooks(str);
@@ -117,7 +122,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     fetchBooks();
-  }, [activeCollection]);
+  }, [fetchBooks, activeCollection]);
 
   const myCollection = useMemo(() => {
     const col = new Collection();
@@ -138,27 +143,27 @@ export default function Dashboard() {
   }, [books]);
 
   const handleRemoveFromCollection = async (bookId) => {
-  if (!activeCollection) return;
+    if (!activeCollection) return;
 
-  const { error } = await supabase
-    .from('memberOfCollection')
-    .delete()
-    .match({
-      book_id: bookId,
-      collection_id: Number(activeCollection)
-    });
+    const { error } = await supabase
+      .from('memberOfCollection')
+      .delete()
+      .match({
+        book_id: bookId,
+        collection_id: Number(activeCollection)
+      });
 
-  if (error) {
-    console.error("Failed to remove from collection:", error.message);
-    return;
-  }
+    if (error) {
+      console.error("Failed to remove from collection:", error.message);
+      return;
+    }
 
-  setBooks(prev => prev.filter(b => b.id !== bookId));
+    setBooks(prev => prev.filter(b => b.id !== bookId));
   };
 
   return (
     <div className="dashboard-container">
-      <button 
+      <button
         className="dashboard-mobile-menu-btn"
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         aria-label="Toggle menu"
@@ -167,7 +172,7 @@ export default function Dashboard() {
       </button>
 
       {isSidebarOpen && (
-        <div 
+        <div
           className="dashboard-sidebar-overlay"
           onClick={() => setIsSidebarOpen(false)}
         />
@@ -184,12 +189,12 @@ export default function Dashboard() {
       </div>
 
       <div className="dashboard-main-content">
-        <DashboardHeader outputSearch={handleSearch}/>
+        <DashboardHeader outputSearch={handleSearch} />
 
         <main className="dashboard-grid-container">
           <div className="dashboard-documents-grid">
             {myCollection.getCollection().map((doc) => (
-              <DocumentCard 
+              <DocumentCard
                 key={doc.id}
                 id={doc.id}
                 title={doc.title}
