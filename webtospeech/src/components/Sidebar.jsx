@@ -13,6 +13,8 @@ export default function Sidebar({ onNavigate, selectedCollection, setSelectedCol
   const [collections, setCollections] = useState([]);
   const [showCreate, setShowCreate] = useState(false);
 
+  const [query, setQuery] = useState("");
+
   useEffect(() => {
     async function fetchCollections() {
       const { data, error } = await supabase
@@ -44,6 +46,10 @@ export default function Sidebar({ onNavigate, selectedCollection, setSelectedCol
     }
   };
 
+  const filteredCollections = collections.filter((c) =>
+    c.name.toLowerCase().includes(query.toLowerCase())
+  );
+
   return (
     <>
       <aside className="sidebar">
@@ -64,7 +70,7 @@ export default function Sidebar({ onNavigate, selectedCollection, setSelectedCol
         <div className="sidebar-collections">
           <h3>Collections</h3>
           <ul className="sidebar-collections-list">
-            {collections.map((collection) => (
+            {filteredCollections.map((collection) => (
               <li key={collection.id}>
                 <button
                   className={`sidebar-collection-item ${selectedCollection === collection.id ? 'active' : ''}`}
@@ -80,6 +86,9 @@ export default function Sidebar({ onNavigate, selectedCollection, setSelectedCol
                 </button>
               </li>
             ))}
+            {filteredCollections.length === 0 && (
+              <li className="sidebar-no-collections">No collections found</li>
+            )}
           </ul>
         </div>
 
@@ -87,6 +96,8 @@ export default function Sidebar({ onNavigate, selectedCollection, setSelectedCol
           <input
             type="text"
             placeholder="Search..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
           />
         </div>
 
