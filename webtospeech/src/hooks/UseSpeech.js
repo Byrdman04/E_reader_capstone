@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 
 export function useSpeech(content) {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -23,7 +23,7 @@ export function useSpeech(content) {
     charOffsetRef.current = 0;
   }, [content]);
 
-  const startUtterance = (offset = 0) => {
+  const startUtterance = useCallback((offset = 0) => {
     const synth = synthRef.current;
     synth.cancel();
 
@@ -49,9 +49,9 @@ export function useSpeech(content) {
 
     utteranceRef.current = utterance;
     synth.speak(utterance);
-  };
+  }, [content, speed, volume]);
 
-  const handlePlayPause = () => {
+  const handlePlayPause = useCallback(() => {
     const synth = synthRef.current;
 
     if (isPlaying) {
@@ -68,7 +68,7 @@ export function useSpeech(content) {
 
     startUtterance(0);
     setIsPlaying(true);
-  };
+  }, [isPlaying, startUtterance]);
 
   const handleSpeedChange = (newSpeed) => {
     setSpeed(newSpeed);

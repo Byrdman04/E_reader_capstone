@@ -88,11 +88,15 @@ function Document() {
     const handleKeyDown = (e) => {
       if (e.key === 'ArrowRight') goToNext();
       if (e.key === 'ArrowLeft')  goToPrev();
+      if (e.key === ' ') {
+        e.preventDefault(); // stops default page scrolling on spacebar
+        handlePlayPause();
+      }
   };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [goToNext, goToPrev]);
+  }, [goToNext, goToPrev, handlePlayPause]);
 
   if (loading) return <div className="loading">Loading document...</div>;
   if (error)   return <div className="error">{error}</div>;
