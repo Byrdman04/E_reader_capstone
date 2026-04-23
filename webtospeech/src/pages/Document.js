@@ -44,6 +44,7 @@ function Document() {
     handlePlayPause,
     handleSpeedChange,
     handleVolumeChange,
+    commitSpeechSettings,
   } = useSpeech(pageContent, handlePageEnd);
 
   const themes = {
@@ -159,6 +160,7 @@ function Document() {
               min="0.5" max="2" step="0.25"
               value={speed}
               onChange={(e) => handleSpeedChange(parseFloat(e.target.value))}
+              onPointerUp={commitSpeechSettings}
               aria-label="Speed control"
               style={{ width: '96px' }}
             />
@@ -173,6 +175,7 @@ function Document() {
               min="0" max="100"
               value={volume}
               onChange={(e) => handleVolumeChange(parseInt(e.target.value))}
+              onPointerUp={commitSpeechSettings}
               aria-label="Volume control"
             />
           </div>

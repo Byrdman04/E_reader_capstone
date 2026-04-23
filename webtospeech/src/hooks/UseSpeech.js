@@ -87,22 +87,17 @@ export function useSpeech(content, onEnd) {
 
   const handleSpeedChange = (newSpeed) => {
     setSpeed(newSpeed);
-
     speedRef.current = newSpeed;
-
-    if (isPlaying) {
-      startUtterance(charOffsetRef.current);
-    }
   };
 
   const handleVolumeChange = (newVolume) => {
     setVolume(newVolume);
-
     volumeRef.current = newVolume;
+  };
 
-    if (isPlaying) {
-      startUtterance(charOffsetRef.current);
-    }
+  const commitSpeechSettings = () => {
+    if (!isPlaying) return;
+    startUtterance(charOffsetRef.current);
   };
 
   const stop = () => {
@@ -120,6 +115,7 @@ export function useSpeech(content, onEnd) {
     handlePlayPause,
     handleSpeedChange,
     handleVolumeChange,
+    commitSpeechSettings,
     stop,
   };
 }
